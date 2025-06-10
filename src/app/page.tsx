@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Facebook,
   Instagram,
@@ -26,23 +27,69 @@ import {
   Users,
   Award,
   Heart,
+  Star,
+  Calendar as CalendarIcon,
+  CreditCard,
+  Package,
+  BookOpen,
+  TrendingUp,
+  Gift,
+  Play,
+  Image as ImageIcon,
+  MessageSquare,
+  Search,
+  Filter,
+  ArrowRight,
+  CheckCircle,
+  Timer,
+  Target,
 } from "lucide-react";
 
 export default function SinglePageApp() {
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   const [cartItems, setCartItems] = useState(3);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState("home");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedMembership, setSelectedMembership] = useState("");
+  const [newsletter, setNewsletter] = useState("");
+
+  // Navigation highlighting based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["home", "meet-bee", "testimonials", "faqs", "contact"];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetBottom = offsetTop + element.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Prevent body scroll when modal is open
   React.useEffect(() => {
-    if (enrollOpen) {
+    const modalOpen = enrollOpen || bookingOpen;
+    if (modalOpen) {
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = "15px";
     } else {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
     }
-  }, [enrollOpen]);
+  }, [enrollOpen, bookingOpen]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -50,6 +97,154 @@ export default function SinglePageApp() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const membershipPlans = [
+    {
+      name: "Basic",
+      price: "$99",
+      period: "/month",
+      classes: "4 Classes",
+      features: [
+        "Group Classes",
+        "Basic Nutrition Guide",
+        "Equipment Included",
+        "Community Access",
+      ],
+      popular: false,
+    },
+    {
+      name: "Premium",
+      price: "$179",
+      period: "/month",
+      classes: "8 Classes + Nutrition",
+      features: [
+        "Group Classes",
+        "1 Private Session",
+        "Nutrition Consultation",
+        "Meal Planning",
+        "Priority Booking",
+      ],
+      popular: true,
+    },
+    {
+      name: "Unlimited",
+      price: "$249",
+      period: "/month",
+      classes: "Unlimited",
+      features: [
+        "Unlimited Group Classes",
+        "2 Private Sessions",
+        "Monthly Nutrition Check-in",
+        "Personalized Meal Plans",
+        "VIP Support",
+      ],
+      popular: false,
+    },
+  ];
+
+  const products = [
+    {
+      name: "Premium Pilates Mat",
+      price: "$89",
+      image:
+        "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Resistance Bands Set",
+      price: "$45",
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Pilates Ball",
+      price: "$35",
+      image:
+        "https://images.unsplash.com/photo-1566133485067-2e65b0c42615?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Foam Roller",
+      price: "$55",
+      image:
+        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      rating: 5,
+      text: "Bee transformed my approach to fitness. Her combination of Pilates and nutrition guidance helped me achieve results I never thought possible.",
+      image:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80",
+      achievement: "Lost 25lbs & gained core strength",
+    },
+    {
+      name: "Michael Chen",
+      rating: 5,
+      text: "As a former athlete dealing with back issues, Bee's expertise in both movement and nutrition has been life-changing.",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80",
+      achievement: "Eliminated chronic back pain",
+    },
+    {
+      name: "Emily Rodriguez",
+      rating: 5,
+      text: "The holistic approach here is unmatched. I'm stronger, more flexible, and have a completely new relationship with food.",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80",
+      achievement: "Improved posture & energy levels",
+    },
+  ];
+
+  const instagramPosts = [
+    {
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      caption:
+        "Morning flow to start the day right ✨ #pilates #mindfulmovement",
+      likes: 342,
+      comments: 28,
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
+      caption:
+        "Core strength isn't just about abs - it's about stability, posture, and confidence 💪",
+      likes: 567,
+      comments: 45,
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&q=80",
+      caption:
+        "Nutrition tip: Start your day with intention and nourishment 🥗 #wellness",
+      likes: 289,
+      comments: 19,
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80",
+      caption:
+        "Behind the scenes of our group class prep ✨ #pilatesinstructor",
+      likes: 412,
+      comments: 33,
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80",
+      caption:
+        "Sunday self-care session 🧘‍♀️ How are you nourishing your body today?",
+      likes: 634,
+      comments: 52,
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+      caption: "Recovery is just as important as the workout 💆‍♀️ #selfcare",
+      likes: 378,
+      comments: 24,
+    },
+  ];
 
   const faqData = [
     {
@@ -77,68 +272,141 @@ export default function SinglePageApp() {
       answer:
         "We maintain the highest safety standards with regular equipment sanitization, proper ventilation, and adherence to all health guidelines. Class sizes are kept small for personalized attention.",
     },
+    {
+      question: "Do you offer online classes?",
+      answer:
+        "Yes! We provide virtual sessions for those who prefer to practice from home. All you need is a mat and some space to move.",
+    },
+  ];
+
+  const blogPosts = [
+    {
+      title: "5 Essential Pilates Exercises for Beginners",
+      excerpt:
+        "Start your Pilates journey with these foundational movements that build core strength and improve posture.",
+      image:
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
+      date: "March 15, 2024",
+      readTime: "5 min read",
+    },
+    {
+      title: "Nutrition Myths Debunked: What Really Works",
+      excerpt:
+        "Separating fact from fiction in the world of nutrition and wellness.",
+      image:
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80",
+      date: "March 12, 2024",
+      readTime: "7 min read",
+    },
+    {
+      title: "Mind-Body Connection: The Science Behind Pilates",
+      excerpt:
+        "Understanding how Pilates creates lasting changes in both physical and mental well-being.",
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      date: "March 10, 2024",
+      readTime: "6 min read",
+    },
   ];
 
   return (
     <div className="font-sans bg-white text-gray-900">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent"></div>
-        <div className="relative z-10 px-16 py-10">
+      {/* Enhanced Navigation */}
+      <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
+        <div className="relative z-10 px-16 py-8">
           <div className="flex justify-between items-center max-w-screen-2xl mx-auto">
             {/* Left Navigation */}
-            <div className="flex space-x-12">
+            <div className="flex space-x-8">
               <button
                 onClick={() => scrollToSection("meet-bee")}
-                className="text-sm tracking-[0.3em] hover:opacity-70 transition-opacity uppercase text-white"
+                className={`text-sm tracking-[0.3em] hover:opacity-70 transition-all uppercase text-white relative ${
+                  activeSection === "meet-bee"
+                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                    : ""
+                }`}
               >
                 Meet Bee
               </button>
+              <button
+                onClick={() => scrollToSection("testimonials")}
+                className={`text-sm tracking-[0.3em] hover:opacity-70 transition-all uppercase text-white relative ${
+                  activeSection === "testimonials"
+                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                    : ""
+                }`}
+              >
+                Testimonials
+              </button>
             </div>
 
-            {/* Center Logo */}
-            <div className="flex items-center space-x-12">
+            {/* Center Logo & Actions */}
+            <div className="flex items-center space-x-8">
               <button
                 onClick={() => scrollToSection("faqs")}
-                className="text-sm tracking-[0.3em] hover:opacity-70 transition-opacity uppercase text-white"
+                className={`text-sm tracking-[0.3em] hover:opacity-70 transition-all uppercase text-white relative ${
+                  activeSection === "faqs"
+                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                    : ""
+                }`}
               >
                 FAQs
               </button>
-              <div className="text-2xl font-light tracking-[0.3em] text-white">
+              <button
+                onClick={() => scrollToSection("home")}
+                className="text-2xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
+              >
                 PWB
-              </div>
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className={`text-sm tracking-[0.3em] hover:opacity-70 transition-all uppercase text-white relative ${
+                  activeSection === "contact"
+                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                    : ""
+                }`}
+              >
+                Contact
+              </button>
             </div>
 
-            {/* Right Navigation - Social Media & Cart */}
+            {/* Right Navigation - Social Media & Actions */}
             <div className="flex items-center space-x-6">
+              <button
+                onClick={() => setBookingOpen(true)}
+                className="text-sm tracking-[0.3em] bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 transition-colors uppercase"
+              >
+                Book Now
+              </button>
+              <div className="w-px h-6 bg-white/30"></div>
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:opacity-70 transition-opacity"
+                className="text-white hover:text-pink-400 transition-colors"
               >
-                <Facebook size={20} />
+                <Facebook size={18} />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/the_hapi_bee/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:opacity-70 transition-opacity"
+                className="text-white hover:text-pink-400 transition-colors"
               >
-                <Instagram size={20} />
+                <Instagram size={18} />
               </a>
               <a
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:opacity-70 transition-opacity"
+                className="text-white hover:text-pink-400 transition-colors"
               >
-                <Music size={20} />
+                <Music size={18} />
               </a>
-              <button className="relative text-white hover:opacity-70 transition-opacity">
-                <ShoppingCart size={20} />
+              <button className="relative text-white hover:text-pink-400 transition-colors">
+                <ShoppingCart size={18} />
                 {cartItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
                     {cartItems}
                   </span>
                 )}
@@ -149,9 +417,9 @@ export default function SinglePageApp() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen overflow-hidden">
+      <section id="home" className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-black opacity-30 z-10" />
+          <div className="absolute inset-0 bg-black opacity-40 z-10" />
           <img
             src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80"
             alt="Hero Background"
@@ -173,9 +441,8 @@ export default function SinglePageApp() {
                     Enroll Now
                   </button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl bg-white p-8 rounded-lg relative overflow-auto max-h-[90vh] backdrop-blur-sm">
-                  {/* Background blur overlay */}
-                  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm -z-10" />
+                <DialogContent className="max-w-2xl bg-white p-8 rounded-lg relative overflow-auto max-h-[90vh]">
+                  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10" />
 
                   <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity">
                     ×
@@ -188,7 +455,6 @@ export default function SinglePageApp() {
                       <form
                         onSubmit={(e) => {
                           e.preventDefault();
-                          // Handle form submission
                           alert(
                             "Thank you for enrolling! We'll contact you within 24 hours to schedule your assessment.",
                           );
@@ -382,13 +648,69 @@ export default function SinglePageApp() {
         </div>
       </section>
 
+      {/* Membership Plans Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Membership Plans
+            </h2>
+            <p className="text-lg text-gray-600">
+              Choose the perfect plan for your wellness journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {membershipPlans.map((plan, index) => (
+              <div
+                key={index}
+                className={`relative bg-white rounded-lg shadow-lg p-8 ${plan.popular ? "ring-2 ring-pink-600 transform scale-105" : ""}`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-sm">
+                    Most Popular
+                  </div>
+                )}
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-light uppercase tracking-wider mb-2">
+                    {plan.name}
+                  </h3>
+                  <div className="text-4xl font-light mb-2">
+                    {plan.price}
+                    <span className="text-lg text-gray-600">{plan.period}</span>
+                  </div>
+                  <p className="text-gray-600">{plan.classes}</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center">
+                      <CheckCircle className="text-pink-600 mr-3" size={16} />
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  className={`w-full ${plan.popular ? "bg-pink-600 hover:bg-pink-700" : "bg-black hover:bg-gray-800"} text-white`}
+                  onClick={() => {
+                    setSelectedMembership(plan.name);
+                    setEnrollOpen(true);
+                  }}
+                >
+                  Choose Plan
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Meet Bee Section */}
-      <section id="meet-bee" className="py-24 bg-gray-50">
+      <section id="meet-bee" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-8">
           <h2 className="text-4xl font-light mb-16 tracking-widest text-center uppercase">
             Meet Bee
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
             <div>
               <img
                 src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&q=80"
@@ -422,12 +744,12 @@ export default function SinglePageApp() {
               </p>
 
               <div className="grid grid-cols-2 gap-6 mt-8">
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <Users className="mx-auto mb-2 text-pink-600" size={24} />
                   <div className="font-semibold">500+</div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <Heart className="mx-auto mb-2 text-pink-600" size={24} />
                   <div className="font-semibold">8 Years</div>
                   <div className="text-sm text-gray-600">Experience</div>
@@ -435,6 +757,224 @@ export default function SinglePageApp() {
               </div>
             </div>
           </div>
+
+          {/* Instagram Feed Section */}
+          <div className="border-t border-gray-200 pt-16">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <Instagram className="text-pink-600" size={28} />
+                <h3 className="text-3xl font-light uppercase tracking-wider">
+                  Follow the Journey
+                </h3>
+              </div>
+              <p className="text-gray-600">
+                Get daily inspiration and wellness tips on Instagram
+              </p>
+              <a
+                href="https://instagram.com/the_hapi_bee/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 text-pink-600 hover:text-pink-700 font-medium"
+              >
+                @the_hapi_bee
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {instagramPosts.map((post, index) => (
+                <div
+                  key={index}
+                  className="relative group cursor-pointer aspect-square"
+                >
+                  <img
+                    src={post.image}
+                    alt={`Instagram post ${index + 1}`}
+                    className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all rounded-lg flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center">
+                      <div className="flex items-center space-x-4 text-sm">
+                        <span className="flex items-center">
+                          <Heart size={16} className="mr-1" />
+                          {post.likes}
+                        </span>
+                        <span className="flex items-center">
+                          <MessageSquare size={16} className="mr-1" />
+                          {post.comments}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Wellness Shop
+            </h2>
+            <p className="text-lg text-gray-600">
+              Premium equipment to support your practice
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {products.map((product, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg overflow-hidden group"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all flex items-center justify-center">
+                    <ShoppingCart
+                      className="text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      size={24}
+                    />
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="font-medium mb-2">{product.name}</h3>
+                  <p className="text-2xl font-light text-pink-600">
+                    {product.price}
+                  </p>
+                  <Button className="w-full mt-4 bg-black hover:bg-pink-600 text-white">
+                    Add to Cart
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Success Stories
+            </h2>
+            <p className="text-lg text-gray-600">
+              Real transformations from our community
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 rounded-lg p-8 text-center"
+              >
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                />
+                <div className="flex justify-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="text-yellow-400 fill-current"
+                      size={16}
+                    />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4 italic">
+                  "{testimonial.text}"
+                </p>
+                <h4 className="font-medium">{testimonial.name}</h4>
+                <p className="text-sm text-pink-600 font-medium">
+                  {testimonial.achievement}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Wellness Insights
+            </h2>
+            <p className="text-lg text-gray-600">
+              Expert tips and guidance for your wellness journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {blogPosts.map((post, index) => (
+              <article
+                key={index}
+                className="bg-white rounded-lg shadow-lg overflow-hidden group cursor-pointer"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center text-sm text-gray-500 mb-3">
+                    <CalendarIcon size={14} className="mr-2" />
+                    {post.date}
+                    <span className="mx-2">•</span>
+                    <Timer size={14} className="mr-2" />
+                    {post.readTime}
+                  </div>
+                  <h3 className="text-xl font-medium mb-3 group-hover:text-pink-600 transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                  <div className="flex items-center text-pink-600 font-medium group-hover:text-pink-700">
+                    Read More <ArrowRight size={16} className="ml-2" />
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 bg-pink-600 text-white">
+        <div className="max-w-4xl mx-auto px-8 text-center">
+          <h2 className="text-3xl font-light mb-4 uppercase tracking-wider">
+            Stay Connected
+          </h2>
+          <p className="text-lg mb-8 opacity-90">
+            Get weekly wellness tips, nutrition insights, and exclusive offers
+          </p>
+          <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              value={newsletter}
+              onChange={(e) => setNewsletter(e.target.value)}
+              className="flex-1 bg-white text-gray-900"
+              required
+            />
+            <Button
+              type="submit"
+              className="bg-black hover:bg-gray-800 text-white px-8"
+            >
+              Subscribe
+            </Button>
+          </form>
         </div>
       </section>
 
@@ -550,7 +1090,7 @@ export default function SinglePageApp() {
                     <Facebook size={24} />
                   </a>
                   <a
-                    href="https://instagram.com"
+                    href="https://instagram.com/the_hapi_bee/"
                     className="text-pink-600 hover:text-pink-400 transition-colors"
                   >
                     <Instagram size={24} />
@@ -647,13 +1187,60 @@ export default function SinglePageApp() {
         </div>
       </section>
 
-      {/* Floating Cart/Book Button */}
-      <button
-        className="fixed bottom-8 right-8 bg-black text-white px-6 py-3 text-sm tracking-widest z-50 hover:bg-pink-600 transition-colors rounded-full shadow-lg"
-        onClick={() => scrollToSection("contact")}
-      >
-        BOOK A CLASS
-      </button>
+      {/* Enhanced Booking Modal */}
+      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+        <DialogContent className="max-w-lg bg-white p-8 relative">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10" />
+
+          <DialogClose className="absolute right-6 top-6 text-2xl hover:opacity-70 transition-opacity z-50">
+            ×
+          </DialogClose>
+          <DialogTitle className="text-2xl font-light tracking-widest mb-8 text-center">
+            BOOK A CLASS
+          </DialogTitle>
+          <div className="space-y-6">
+            <div>
+              <Label className="text-sm tracking-wider uppercase">
+                Select Date
+              </Label>
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="mb-4"
+              />
+            </div>
+
+            <div>
+              <Label className="text-sm tracking-wider uppercase">
+                Class Type
+              </Label>
+              <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-2">
+                <option>Group Pilates</option>
+                <option>Private Session</option>
+                <option>Nutrition Consultation</option>
+              </select>
+            </div>
+
+            <div>
+              <Label className="text-sm tracking-wider uppercase">
+                Preferred Time
+              </Label>
+              <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-2">
+                <option>9:00 AM</option>
+                <option>11:00 AM</option>
+                <option>2:00 PM</option>
+                <option>4:00 PM</option>
+                <option>6:00 PM</option>
+              </select>
+            </div>
+
+            <Button className="w-full bg-black hover:bg-pink-600 text-white">
+              CONFIRM BOOKING
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
