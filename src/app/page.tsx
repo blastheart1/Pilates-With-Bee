@@ -233,7 +233,7 @@ export default function SinglePageApp() {
   const membershipPlans = [
     {
       name: "Basic",
-      price: "$99",
+      price: "₱4,950",
       period: "/month",
       classes: "4 Classes",
       features: [
@@ -247,7 +247,7 @@ export default function SinglePageApp() {
     },
     {
       name: "Premium",
-      price: "$179",
+      price: "₱8,950",
       period: "/month",
       classes: "8 Classes + Nutrition",
       features: [
@@ -262,7 +262,7 @@ export default function SinglePageApp() {
     },
     {
       name: "Unlimited",
-      price: "$249",
+      price: "₱12,450",
       period: "/month",
       classes: "Unlimited",
       features: [
@@ -277,7 +277,7 @@ export default function SinglePageApp() {
     },
     {
       name: "Family Basic",
-      price: "$169",
+      price: "₱8,450",
       period: "/month",
       classes: "8 Classes (2 people)",
       features: [
@@ -291,7 +291,7 @@ export default function SinglePageApp() {
     },
     {
       name: "Family Premium",
-      price: "$299",
+      price: "₱14,950",
       period: "/month",
       classes: "16 Classes + Nutrition",
       features: [
