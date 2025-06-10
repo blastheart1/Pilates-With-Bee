@@ -836,7 +836,7 @@ export default function SinglePageApp() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-black opacity-40 z-10" />
           <img
-            src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80"
+            src="https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80"
             alt="Hero Background"
             className="w-full h-full object-cover"
           />
