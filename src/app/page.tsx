@@ -1979,50 +1979,50 @@ export default function SinglePageApp() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-4 sm:p-6">
             {currentPortalTab === "dashboard" && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-pink-100 rounded-lg">
+                      <div className="p-2 bg-pink-100 rounded-lg flex-shrink-0">
                         <CalendarIcon className="text-pink-600" size={20} />
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold">
+                      <div className="min-w-0">
+                        <div className="text-xl sm:text-2xl font-bold">
                           {memberData.classesRemaining}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           Classes Remaining
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
+                      <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
                         <Trophy className="text-blue-600" size={20} />
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold">
+                      <div className="min-w-0">
+                        <div className="text-xl sm:text-2xl font-bold">
                           {memberData.loyaltyPoints}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           Loyalty Points
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border sm:col-span-2 lg:col-span-1">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
+                      <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
                         <Flame className="text-green-600" size={20} />
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold">
+                      <div className="min-w-0">
+                        <div className="text-xl sm:text-2xl font-bold">
                           {memberData.classesAttended}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           Classes Attended
                         </div>
                       </div>
@@ -2030,7 +2030,7 @@ export default function SinglePageApp() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-white p-6 rounded-lg shadow-sm border">
                     <h3 className="font-semibold mb-4">Upcoming Classes</h3>
                     <div className="space-y-3">
