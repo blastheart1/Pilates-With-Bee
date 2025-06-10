@@ -84,19 +84,19 @@ export default function SinglePageApp() {
     {
       id: 1,
       name: "Premium Pilates Mat",
-      price: 89,
+      price: 4450,
       quantity: 1,
       image:
-        "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80&w=400",
       type: "physical",
     },
     {
       id: 2,
       name: "Resistance Bands Set",
-      price: 45,
+      price: 2250,
       quantity: 2,
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=400",
       type: "physical",
     },
   ]);
