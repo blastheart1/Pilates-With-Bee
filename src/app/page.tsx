@@ -1835,54 +1835,142 @@ export default function SinglePageApp() {
         </div>
       </Overlay>
 
-      {/* Member Portal Overlay */}
+      {/* Member Portal Overlay - Mobile Responsive */}
       <Overlay
         isOpen={memberPortalOverlay}
         onClose={() => setMemberPortalOverlay(false)}
         title="Member Portal"
       >
-        <div className="flex h-full">
-          {/* Sidebar */}
-          <div className="w-64 bg-gray-50 p-6">
+        <div className="flex flex-col lg:flex-row h-full">
+          {/* Mobile Tab Navigation */}
+          <div className="lg:hidden bg-gray-50 border-b border-gray-200">
+            <div className="flex overflow-x-auto p-2 space-x-1">
+              <button
+                onClick={() => setCurrentPortalTab("dashboard")}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[100px] touch-target ${
+                  currentPortalTab === "dashboard"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <BarChart3 className="inline mr-1" size={14} />
+                Dashboard
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("bookings")}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[100px] touch-target ${
+                  currentPortalTab === "bookings"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <CalendarIcon className="inline mr-1" size={14} />
+                Bookings
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("progress")}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[100px] touch-target ${
+                  currentPortalTab === "progress"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <TrendingUpIcon className="inline mr-1" size={14} />
+                Progress
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("loyalty")}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[100px] touch-target ${
+                  currentPortalTab === "loyalty"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Crown className="inline mr-1" size={14} />
+                Loyalty
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("referrals")}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[100px] touch-target ${
+                  currentPortalTab === "referrals"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Users className="inline mr-1" size={14} />
+                Referrals
+              </button>
+              <button
+                onClick={() => setAnalyticsOverlay(true)}
+                className="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 hover:bg-gray-100 min-w-[100px] touch-target"
+              >
+                <Activity className="inline mr-1" size={14} />
+                Analytics
+              </button>
+            </div>
+          </div>
+
+          {/* Desktop Sidebar */}
+          <div className="hidden lg:block w-64 bg-gray-50 p-6 border-r border-gray-200">
             <div className="space-y-2">
               <button
                 onClick={() => setCurrentPortalTab("dashboard")}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "dashboard" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+                className={`w-full text-left p-3 rounded-lg transition-colors touch-target ${
+                  currentPortalTab === "dashboard"
+                    ? "bg-pink-600 text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 <BarChart3 className="inline mr-2" size={16} />
                 Dashboard
               </button>
               <button
                 onClick={() => setCurrentPortalTab("bookings")}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "bookings" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+                className={`w-full text-left p-3 rounded-lg transition-colors touch-target ${
+                  currentPortalTab === "bookings"
+                    ? "bg-pink-600 text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 <CalendarIcon className="inline mr-2" size={16} />
                 My Bookings
               </button>
               <button
                 onClick={() => setCurrentPortalTab("progress")}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "progress" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+                className={`w-full text-left p-3 rounded-lg transition-colors touch-target ${
+                  currentPortalTab === "progress"
+                    ? "bg-pink-600 text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 <TrendingUpIcon className="inline mr-2" size={16} />
                 Progress Tracking
               </button>
               <button
                 onClick={() => setCurrentPortalTab("loyalty")}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "loyalty" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+                className={`w-full text-left p-3 rounded-lg transition-colors touch-target ${
+                  currentPortalTab === "loyalty"
+                    ? "bg-pink-600 text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 <Crown className="inline mr-2" size={16} />
                 Loyalty Rewards
               </button>
               <button
                 onClick={() => setCurrentPortalTab("referrals")}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "referrals" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+                className={`w-full text-left p-3 rounded-lg transition-colors touch-target ${
+                  currentPortalTab === "referrals"
+                    ? "bg-pink-600 text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 <Users className="inline mr-2" size={16} />
                 Referral Program
               </button>
               <button
                 onClick={() => setAnalyticsOverlay(true)}
-                className="w-full text-left p-3 rounded-lg hover:bg-gray-200"
+                className="w-full text-left p-3 rounded-lg hover:bg-gray-200 touch-target"
               >
                 <Activity className="inline mr-2" size={16} />
                 Advanced Analytics
