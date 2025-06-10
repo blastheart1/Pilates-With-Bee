@@ -2428,7 +2428,7 @@ export default function SinglePageApp() {
                       </p>
                       <div className="flex justify-between items-center">
                         <span className="text-lg font-light text-blue-600">
-                          ${product.price}
+                          ₱{product.price.toLocaleString()}
                         </span>
                         <Button
                           size="sm"
