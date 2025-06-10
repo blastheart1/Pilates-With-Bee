@@ -922,19 +922,193 @@ export default function SinglePageApp() {
 
   return (
     <div className="font-sans bg-white text-gray-900">
-      {/* Restructured Navigation - 3 Sections */}
+      {/* Mobile-Optimized Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
-        <div className="relative z-10 px-16 py-8">
+        <div className="relative z-10 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-8">
           <div className="flex justify-between items-center max-w-screen-2xl mx-auto">
-            {/* Left Section */}
-            <div className="flex items-center space-x-16">
+            {/* Mobile Layout */}
+            <div className="flex md:hidden w-full justify-between items-center">
+              {/* Mobile Hamburger Menu */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="w-11 h-11 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/30 transition-all"
+                aria-label="Toggle mobile menu"
+              >
+                <Menu size={20} />
+              </button>
+
+              {/* Mobile PWB Logo */}
+              <button
+                onClick={() => scrollToSection("home")}
+                className="text-2xl sm:text-3xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
+              >
+                PWB
+              </button>
+
+              {/* Mobile Cart */}
+              <button
+                onClick={() => setCartOverlay(true)}
+                className="relative w-11 h-11 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/30 transition-all"
+                aria-label="Shopping cart"
+              >
+                <ShoppingCart size={18} />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-medium">
+                    {cartItemCount}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Desktop Layout - Hidden on Mobile */}
+            <div className="hidden md:flex justify-between items-center w-full">
+              {/* Left Section */}
+              <div className="flex items-center space-x-8 lg:space-x-16">
+                <button
+                  onClick={() => scrollToSection("meet-bee")}
+                  className={`text-sm lg:text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
+                    activeSection === "meet-bee"
+                      ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                      : ""
+                  }`}
+                >
+                  Meet Bee
+                </button>
+
+                <button
+                  onClick={() => scrollToSection("testimonials")}
+                  className={`text-sm lg:text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
+                    activeSection === "testimonials"
+                      ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                      : ""
+                  }`}
+                >
+                  Testimonials
+                </button>
+              </div>
+
+              {/* Center Section - PWB */}
+              <div className="absolute left-1/2 transform -translate-x-1/2">
+                <button
+                  onClick={() => scrollToSection("home")}
+                  className="text-3xl lg:text-4xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
+                >
+                  PWB
+                </button>
+              </div>
+
+              {/* Right Section */}
+              <div className="flex items-center space-x-4 lg:space-x-8">
+                <button
+                  onClick={() => scrollToSection("faqs")}
+                  className={`text-sm lg:text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
+                    activeSection === "faqs"
+                      ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                      : ""
+                  }`}
+                >
+                  FAQs
+                </button>
+
+                <button
+                  onClick={() => scrollToSection("contact")}
+                  className={`text-sm lg:text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
+                    activeSection === "contact"
+                      ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
+                      : ""
+                  }`}
+                >
+                  Contact
+                </button>
+
+                {isLoggedIn && (
+                  <button
+                    onClick={() => setMemberPortalOverlay(true)}
+                    className="text-white hover:text-pink-400 transition-colors p-2"
+                    title="Member Portal"
+                  >
+                    <User size={18} />
+                  </button>
+                )}
+
+                <div className="w-px h-6 bg-white/30 mx-2"></div>
+
+                {/* Social Media Icons */}
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-pink-400 transition-colors p-2"
+                  aria-label="Follow us on Facebook"
+                >
+                  <Facebook size={18} />
+                </a>
+                <a
+                  href="https://instagram.com/the_hapi_bee/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-pink-400 transition-colors p-2"
+                  aria-label="Follow us on Instagram"
+                >
+                  <Instagram size={18} />
+                </a>
+                <a
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-pink-400 transition-colors p-2"
+                  aria-label="Follow us on TikTok"
+                >
+                  <Music size={18} />
+                </a>
+                <button
+                  onClick={() => setCartOverlay(true)}
+                  className="relative text-white hover:text-pink-400 transition-colors p-2"
+                  aria-label="Shopping cart"
+                >
+                  <ShoppingCart size={18} />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-medium">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        <div
+          className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-md transition-all duration-300 ${
+            mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Mobile Menu Header */}
+            <div className="flex justify-between items-center p-6 border-b border-white/10">
+              <button
+                onClick={() => scrollToSection("home")}
+                className="text-3xl font-light tracking-[0.3em] text-white"
+              >
+                PWB
+              </button>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                aria-label="Close mobile menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Mobile Menu Content */}
+            <div className="flex-1 flex flex-col justify-center px-8 space-y-8">
               <button
                 onClick={() => scrollToSection("meet-bee")}
-                className={`text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
-                  activeSection === "meet-bee"
-                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
-                    : ""
+                className={`text-left text-2xl font-light tracking-[0.2em] text-white hover:text-pink-400 transition-all uppercase py-4 border-b border-white/10 ${
+                  activeSection === "meet-bee" ? "text-pink-400" : ""
                 }`}
               >
                 Meet Bee
@@ -942,34 +1116,17 @@ export default function SinglePageApp() {
 
               <button
                 onClick={() => scrollToSection("testimonials")}
-                className={`text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
-                  activeSection === "testimonials"
-                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
-                    : ""
+                className={`text-left text-2xl font-light tracking-[0.2em] text-white hover:text-pink-400 transition-all uppercase py-4 border-b border-white/10 ${
+                  activeSection === "testimonials" ? "text-pink-400" : ""
                 }`}
               >
                 Testimonials
               </button>
-            </div>
 
-            {/* Center Section - PWB */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <button
-                onClick={() => scrollToSection("home")}
-                className="text-4xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
-              >
-                PWB
-              </button>
-            </div>
-
-            {/* Right Section */}
-            <div className="flex items-center space-x-8">
               <button
                 onClick={() => scrollToSection("faqs")}
-                className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
-                  activeSection === "faqs"
-                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
-                    : ""
+                className={`text-left text-2xl font-light tracking-[0.2em] text-white hover:text-pink-400 transition-all uppercase py-4 border-b border-white/10 ${
+                  activeSection === "faqs" ? "text-pink-400" : ""
                 }`}
               >
                 FAQs
@@ -977,63 +1134,76 @@ export default function SinglePageApp() {
 
               <button
                 onClick={() => scrollToSection("contact")}
-                className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
-                  activeSection === "contact"
-                    ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
-                    : ""
+                className={`text-left text-2xl font-light tracking-[0.2em] text-white hover:text-pink-400 transition-all uppercase py-4 border-b border-white/10 ${
+                  activeSection === "contact" ? "text-pink-400" : ""
                 }`}
               >
                 Contact
               </button>
 
-              {isLoggedIn && (
+              {/* Mobile Menu Action Buttons */}
+              <div className="space-y-4 pt-8">
                 <button
-                  onClick={() => setMemberPortalOverlay(true)}
-                  className="text-white hover:text-pink-400 transition-colors"
-                  title="Member Portal"
+                  onClick={() => {
+                    setEnrollOverlay(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 px-6 rounded-full text-lg font-medium tracking-[0.2em] uppercase transition-all"
                 >
-                  <User size={18} />
+                  Enroll Now
                 </button>
-              )}
+                <button
+                  onClick={() => {
+                    setBookingOverlay(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full border border-white text-white hover:bg-white hover:text-black py-4 px-6 rounded-full text-lg font-medium tracking-[0.2em] uppercase transition-all"
+                >
+                  Book Class
+                </button>
+                {isLoggedIn && (
+                  <button
+                    onClick={() => {
+                      setMemberPortalOverlay(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full border border-pink-600 text-pink-400 hover:bg-pink-600 hover:text-white py-4 px-6 rounded-full text-lg font-medium tracking-[0.2em] uppercase transition-all"
+                  >
+                    Member Portal
+                  </button>
+                )}
+              </div>
+            </div>
 
-              <div className="w-px h-6 bg-white/30 mx-4"></div>
-
-              {/* Social Media Icons */}
+            {/* Mobile Menu Footer - Social Links */}
+            <div className="flex justify-center space-x-8 p-8 border-t border-white/10">
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-pink-400 transition-colors"
+                className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 hover:text-white transition-all"
+                aria-label="Follow us on Facebook"
               >
-                <Facebook size={18} />
+                <Facebook size={20} />
               </a>
               <a
                 href="https://instagram.com/the_hapi_bee/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-pink-400 transition-colors"
+                className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 hover:text-white transition-all"
+                aria-label="Follow us on Instagram"
               >
-                <Instagram size={18} />
+                <Instagram size={20} />
               </a>
               <a
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-pink-400 transition-colors"
+                className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 hover:text-white transition-all"
+                aria-label="Follow us on TikTok"
               >
-                <Music size={18} />
+                <Music size={20} />
               </a>
-              <button
-                onClick={() => setCartOverlay(true)}
-                className="relative text-white hover:text-pink-400 transition-colors"
-              >
-                <ShoppingCart size={18} />
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                    {cartItemCount}
-                  </span>
-                )}
-              </button>
             </div>
           </div>
         </div>
