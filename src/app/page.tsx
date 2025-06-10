@@ -2586,11 +2586,13 @@ export default function SinglePageApp() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {certifications.map((cert, index) => (
               <div key={index} className="text-center group">
-                <div className="bg-white rounded-lg p-6 mb-4 group-hover:bg-gray-100 transition-colors">
+                <div
+                  className={`${cert.color} rounded-lg p-6 mb-4 group-hover:scale-105 transition-all duration-300 shadow-md`}
+                >
                   <img
                     src={cert.logo}
                     alt={cert.name}
-                    className="w-full h-20 object-contain mx-auto"
+                    className="w-full h-20 object-cover mx-auto rounded"
                   />
                 </div>
                 <h3 className="font-medium text-sm text-gray-800">
