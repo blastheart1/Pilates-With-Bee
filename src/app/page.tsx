@@ -45,27 +45,53 @@ import {
   Target,
   UserPlus,
   CalendarDays,
+  X,
+  Plus,
+  Minus,
+  Building,
+  Shield,
+  GraduationCap,
+  Certificate,
+  MapPinIcon,
 } from "lucide-react";
 
 export default function SinglePageApp() {
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(3);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 1,
+      name: "Premium Pilates Mat",
+      price: 89,
+      quantity: 1,
+      image:
+        "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+    },
+    {
+      id: 2,
+      name: "Resistance Bands Set",
+      price: 45,
+      quantity: 2,
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+    },
+  ]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeSection, setActiveSection] = useState("home");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedMembership, setSelectedMembership] = useState("");
   const [newsletter, setNewsletter] = useState("");
-  const [showActionButtons, setShowActionButtons] = useState(false);
+  const [showFloatingButtons, setShowFloatingButtons] = useState(false);
 
-  // Navigation highlighting and button visibility based on scroll position
+  // Check if hero buttons are out of view and show floating buttons
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "meet-bee", "testimonials", "faqs", "contact"];
       const scrollPosition = window.scrollY + 100;
 
-      // Show action buttons after scrolling 200px
-      setShowActionButtons(window.scrollY > 200);
+      // Show floating buttons when scrolled past hero section (1000px is approximately where hero ends)
+      setShowFloatingButtons(window.scrollY > 800);
 
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId);
@@ -87,7 +113,7 @@ export default function SinglePageApp() {
 
   // Prevent body scroll when modal is open
   React.useEffect(() => {
-    const modalOpen = enrollOpen || bookingOpen;
+    const modalOpen = enrollOpen || bookingOpen || cartOpen;
     if (modalOpen) {
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = "15px";
@@ -95,13 +121,7 @@ export default function SinglePageApp() {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
     }
-
-    // Cleanup on unmount
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    };
-  }, [enrollOpen, bookingOpen]);
+  }, [enrollOpen, bookingOpen, cartOpen]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -109,6 +129,24 @@ export default function SinglePageApp() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const updateCartQuantity = (id: number, change: number) => {
+    setCartItems((items) =>
+      items
+        .map((item) =>
+          item.id === id
+            ? { ...item, quantity: Math.max(0, item.quantity + change) }
+            : item,
+        )
+        .filter((item) => item.quantity > 0),
+    );
+  };
+
+  const cartTotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const membershipPlans = [
     {
@@ -156,30 +194,49 @@ export default function SinglePageApp() {
 
   const products = [
     {
+      id: 3,
       name: "Premium Pilates Mat",
-      price: "$89",
+      price: 89,
       image:
         "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
     },
     {
+      id: 4,
       name: "Resistance Bands Set",
-      price: "$45",
+      price: 45,
       image:
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
     },
     {
+      id: 5,
       name: "Pilates Ball",
-      price: "$35",
+      price: 35,
       image:
         "https://images.unsplash.com/photo-1566133485067-2e65b0c42615?auto=format&fit=crop&q=80",
     },
     {
+      id: 6,
       name: "Foam Roller",
-      price: "$55",
+      price: 55,
       image:
         "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
     },
   ];
+
+  const addToCart = (product: (typeof products)[0]) => {
+    setCartItems((items) => {
+      const existingItem = items.find((item) => item.id === product.id);
+      if (existingItem) {
+        return items.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        );
+      } else {
+        return [...items, { ...product, quantity: 1 }];
+      }
+    });
+  };
 
   const testimonials = [
     {
@@ -360,15 +417,64 @@ export default function SinglePageApp() {
     },
   ];
 
+  const studioLocations = [
+    {
+      name: "Downtown Studio",
+      address:
+        "123 Wellness Street, Mind & Body District, Healthy City, HC 12345",
+      phone: "+1 (555) 123-4567",
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      amenities: [
+        "Private Showers",
+        "Changing Rooms",
+        "Equipment Storage",
+        "Reception Area",
+      ],
+    },
+    {
+      name: "Uptown Studio",
+      address: "456 Serenity Ave, Wellness Quarter, Healthy City, HC 12346",
+      phone: "+1 (555) 123-4568",
+      image:
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
+      amenities: [
+        "Outdoor Terrace",
+        "Juice Bar",
+        "Meditation Room",
+        "Parking Available",
+      ],
+    },
+  ];
+
+  const certifications = [
+    {
+      name: "BASI Pilates",
+      logo: "https://images.unsplash.com/photo-1565264894740-ca0c3a01e2a3?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Registered Nutritionist Dietitian",
+      logo: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Continuing Education Alliance",
+      logo: "https://images.unsplash.com/photo-1554475901-3905ba725ae8?auto=format&fit=crop&q=80",
+    },
+    {
+      name: "Yoga Alliance",
+      logo: "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+    },
+  ];
+
   return (
     <div className="font-sans bg-white text-gray-900">
-      {/* Enhanced Navigation with Centered Layout */}
+      {/* Restructured Navigation - 3 Sections */}
       <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
         <div className="relative z-10 px-16 py-8">
-          <div className="flex items-center justify-center max-w-screen-2xl mx-auto">
-            {/* Centered Main Navigation */}
-            <div className="flex items-center justify-center space-x-16">
+          <div className="flex justify-between items-center max-w-screen-2xl mx-auto">
+            {/* Left Section */}
+            <div className="flex items-center space-x-16">
               <button
                 onClick={() => scrollToSection("meet-bee")}
                 className={`text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
@@ -390,7 +496,20 @@ export default function SinglePageApp() {
               >
                 Testimonials
               </button>
+            </div>
 
+            {/* Center Section - PWB */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <button
+                onClick={() => scrollToSection("home")}
+                className="text-4xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
+              >
+                PWB
+              </button>
+            </div>
+
+            {/* Right Section */}
+            <div className="flex items-center space-x-8">
               <button
                 onClick={() => scrollToSection("faqs")}
                 className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
@@ -403,13 +522,6 @@ export default function SinglePageApp() {
               </button>
 
               <button
-                onClick={() => scrollToSection("home")}
-                className="text-4xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors mx-8"
-              >
-                PWB
-              </button>
-
-              <button
                 onClick={() => scrollToSection("contact")}
                 className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
                   activeSection === "contact"
@@ -419,35 +531,8 @@ export default function SinglePageApp() {
               >
                 Contact
               </button>
-            </div>
 
-            {/* Action Buttons - Show on Scroll */}
-            <div
-              className={`absolute right-0 flex items-center space-x-4 transition-all duration-500 ${
-                showActionButtons
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-4 pointer-events-none"
-              }`}
-            >
-              {/* Enroll Now Button */}
-              <button
-                onClick={() => setEnrollOpen(true)}
-                className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 transition-colors uppercase rounded-md flex items-center space-x-2 shadow-lg"
-              >
-                <UserPlus size={14} />
-                <span>Enroll</span>
-              </button>
-
-              {/* Book Now Button */}
-              <button
-                onClick={() => setBookingOpen(true)}
-                className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 transition-colors uppercase rounded-md flex items-center space-x-2 shadow-lg"
-              >
-                <CalendarDays size={14} />
-                <span>Book</span>
-              </button>
-
-              <div className="w-px h-6 bg-white/30 ml-4"></div>
+              <div className="w-px h-6 bg-white/30 mx-4"></div>
 
               {/* Social Media Icons */}
               <a
@@ -474,11 +559,14 @@ export default function SinglePageApp() {
               >
                 <Music size={18} />
               </a>
-              <button className="relative text-white hover:text-pink-400 transition-colors">
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative text-white hover:text-pink-400 transition-colors"
+              >
                 <ShoppingCart size={18} />
-                {cartItems > 0 && (
+                {cartItemCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                    {cartItems}
+                    {cartItemCount}
                   </span>
                 )}
               </button>
@@ -486,6 +574,30 @@ export default function SinglePageApp() {
           </div>
         </div>
       </nav>
+
+      {/* Floating Action Buttons - Show when hero buttons are out of view */}
+      <div
+        className={`fixed bottom-8 right-8 z-50 flex flex-col space-y-4 transition-all duration-500 ${
+          showFloatingButtons
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-8 pointer-events-none"
+        }`}
+      >
+        <button
+          onClick={() => setEnrollOpen(true)}
+          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-colors"
+        >
+          <UserPlus size={16} />
+          <span className="font-medium">Enroll Now</span>
+        </button>
+        <button
+          onClick={() => setBookingOpen(true)}
+          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-colors"
+        >
+          <CalendarDays size={16} />
+          <span className="font-medium">Book Class</span>
+        </button>
+      </div>
 
       {/* Hero Section */}
       <section id="home" className="relative h-screen overflow-hidden">
@@ -527,320 +639,308 @@ export default function SinglePageApp() {
       </section>
 
       {/* Enhanced Enroll Now Modal for New Users */}
-      {enrollOpen && (
-        <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
-          <DialogContent className="max-w-4xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
-            <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
-              ×
-            </DialogClose>
+      <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
+        <DialogContent className="max-w-4xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
+          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
+            <X size={16} />
+          </DialogClose>
 
-            <div className="overflow-auto max-h-[90vh] p-8">
-              <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-                Welcome to PWB
-              </DialogTitle>
-              <DialogDescription asChild>
-                <div className="text-center mb-8">
-                  <p className="text-lg text-gray-600">
-                    Begin your wellness journey with our comprehensive
-                    pre-assessment
-                  </p>
-                </div>
-              </DialogDescription>
+          <div className="overflow-auto max-h-[90vh] p-8">
+            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
+              Welcome to PWB
+            </DialogTitle>
+            <DialogDescription asChild>
+              <div className="text-center mb-8">
+                <p className="text-lg text-gray-600">
+                  Begin your wellness journey with our comprehensive
+                  pre-assessment
+                </p>
+              </div>
+            </DialogDescription>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert(
-                    "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
-                  );
-                  setEnrollOpen(false);
-                }}
-                className="space-y-8 text-gray-900"
-              >
-                {/* Personal Information */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <Users className="mr-2 text-pink-600" size={20} />
-                    Personal Information
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="firstName" className="font-medium">
-                        First Name *
-                      </Label>
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="lastName" className="font-medium">
-                        Last Name *
-                      </Label>
-                      <Input
-                        id="lastName"
-                        name="lastName"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="font-medium">
-                        Email Address *
-                      </Label>
-                      <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone" className="font-medium">
-                        Phone Number *
-                      </Label>
-                      <Input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="age" className="font-medium">
-                        Age *
-                      </Label>
-                      <Input
-                        type="number"
-                        id="age"
-                        name="age"
-                        min="16"
-                        max="100"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="emergencyContact" className="font-medium">
-                        Emergency Contact
-                      </Label>
-                      <Input
-                        id="emergencyContact"
-                        name="emergencyContact"
-                        placeholder="Name & Phone"
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Fitness Background */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <Target className="mr-2 text-pink-600" size={20} />
-                    Fitness Background
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="experience" className="font-medium">
-                        Pilates Experience *
-                      </Label>
-                      <select
-                        id="experience"
-                        name="experience"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                        required
-                      >
-                        <option value="">Select your level</option>
-                        <option value="beginner">Complete Beginner</option>
-                        <option value="some">
-                          Some Experience (1-6 months)
-                        </option>
-                        <option value="intermediate">
-                          Intermediate (6+ months)
-                        </option>
-                        <option value="advanced">Advanced (2+ years)</option>
-                      </select>
-                    </div>
-                    <div>
-                      <Label htmlFor="fitnessLevel" className="font-medium">
-                        Overall Fitness Level *
-                      </Label>
-                      <select
-                        id="fitnessLevel"
-                        name="fitnessLevel"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                        required
-                      >
-                        <option value="">Select level</option>
-                        <option value="sedentary">Sedentary</option>
-                        <option value="lightly-active">Lightly Active</option>
-                        <option value="moderately-active">
-                          Moderately Active
-                        </option>
-                        <option value="very-active">Very Active</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <Label htmlFor="currentActivities" className="font-medium">
-                      Current Physical Activities
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert(
+                  "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
+                );
+                setEnrollOpen(false);
+              }}
+              className="space-y-8 text-gray-900"
+            >
+              {/* Personal Information */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-medium mb-4 flex items-center">
+                  <Users className="mr-2 text-pink-600" size={20} />
+                  Personal Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="firstName" className="font-medium">
+                      First Name *
                     </Label>
-                    <Textarea
-                      id="currentActivities"
-                      name="currentActivities"
-                      rows={3}
-                      placeholder="List any sports, exercise routines, or physical activities you currently do..."
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="font-medium">
+                      Last Name *
+                    </Label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="font-medium">
+                      Email Address *
+                    </Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone" className="font-medium">
+                      Phone Number *
+                    </Label>
+                    <Input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      required
                       className="mt-1"
                     />
                   </div>
                 </div>
+              </div>
 
-                {/* Goals & Expectations */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <Target className="mr-2 text-pink-600" size={20} />
-                    Goals & Expectations
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="goals" className="font-medium">
-                        Primary Fitness Goals *
-                      </Label>
-                      <Textarea
-                        id="goals"
-                        name="goals"
-                        rows={3}
-                        placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
+              {/* Goals & Expectations */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-medium mb-4 flex items-center">
+                  <Target className="mr-2 text-pink-600" size={20} />
+                  Goals & Expectations
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="goals" className="font-medium">
+                      Primary Fitness Goals *
+                    </Label>
+                    <Textarea
+                      id="goals"
+                      name="goals"
+                      rows={3}
+                      placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
+                      required
+                      className="mt-1"
+                    />
                   </div>
-                </div>
-
-                <div className="text-center pt-4">
-                  <Button
-                    type="submit"
-                    className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
-                  >
-                    Complete Pre-Assessment & Schedule Consultation
-                  </Button>
-                  <p className="text-sm text-gray-600 mt-3">
-                    We'll review your information and contact you within 24
-                    hours to schedule your complimentary consultation
-                  </p>
-                </div>
-              </form>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Enhanced Book Now Modal for Existing Users */}
-      {bookingOpen && (
-        <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-          <DialogContent className="max-w-5xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
-            <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
-              ×
-            </DialogClose>
-
-            <div className="overflow-auto max-h-[90vh] p-8">
-              <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-                Book Your Class
-              </DialogTitle>
-              <DialogDescription asChild>
-                <div className="text-center mb-8">
-                  <p className="text-lg text-gray-600">
-                    Select your preferred date, time, and instructor
-                  </p>
-                </div>
-              </DialogDescription>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Calendar Section */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <CalendarIcon className="mr-2 text-pink-600" size={20} />
-                    Select Date
-                  </h3>
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    className="rounded-md border w-full"
-                    disabled={(date) => date < new Date()}
-                  />
-                </div>
-
-                {/* Time Slots & Details */}
-                <div className="space-y-6">
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-medium mb-4 flex items-center">
-                      <Clock className="mr-2 text-pink-600" size={20} />
-                      Available Time Slots
-                    </h3>
-                    {selectedDate ? (
-                      <div className="space-y-3">
-                        {availableSlots.map((slot, index) => (
-                          <div
-                            key={index}
-                            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                              slot.available
-                                ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
-                                : "border-gray-100 bg-gray-100 cursor-not-allowed opacity-50"
-                            }`}
-                          >
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <div className="font-medium text-lg">
-                                  {slot.time}
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  with {slot.instructor}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {slot.location}
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                {slot.available ? (
-                                  <span className="text-green-600 font-medium">
-                                    Available
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500 font-medium">
-                                    Booked
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 text-center py-8">
-                        Please select a date to view available time slots
-                      </p>
-                    )}
-                  </div>
-
-                  <Button
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
-                    disabled={!selectedDate}
-                  >
-                    Confirm Booking
-                  </Button>
                 </div>
               </div>
+
+              <div className="text-center pt-4">
+                <Button
+                  type="submit"
+                  className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
+                >
+                  Complete Pre-Assessment & Schedule Consultation
+                </Button>
+                <p className="text-sm text-gray-600 mt-3">
+                  We'll review your information and contact you within 24 hours
+                  to schedule your complimentary consultation
+                </p>
+              </div>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Enhanced Book Now Modal for Existing Users */}
+      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+        <DialogContent className="max-w-5xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
+          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
+            <X size={16} />
+          </DialogClose>
+
+          <div className="overflow-auto max-h-[90vh] p-8">
+            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
+              Book Your Class
+            </DialogTitle>
+            <DialogDescription asChild>
+              <div className="text-center mb-8">
+                <p className="text-lg text-gray-600">
+                  Select your preferred date, time, and instructor
+                </p>
+              </div>
+            </DialogDescription>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Calendar Section */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-medium mb-4 flex items-center">
+                  <CalendarIcon className="mr-2 text-pink-600" size={20} />
+                  Select Date
+                </h3>
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  className="rounded-md border w-full"
+                  disabled={(date) => date < new Date()}
+                />
+              </div>
+
+              {/* Time Slots & Details */}
+              <div className="space-y-6">
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-medium mb-4 flex items-center">
+                    <Clock className="mr-2 text-pink-600" size={20} />
+                    Available Time Slots
+                  </h3>
+                  {selectedDate ? (
+                    <div className="space-y-3">
+                      {availableSlots.map((slot, index) => (
+                        <div
+                          key={index}
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            slot.available
+                              ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
+                              : "border-gray-100 bg-gray-100 cursor-not-allowed opacity-50"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <div className="font-medium text-lg">
+                                {slot.time}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                with {slot.instructor}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {slot.location}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              {slot.available ? (
+                                <span className="text-green-600 font-medium">
+                                  Available
+                                </span>
+                              ) : (
+                                <span className="text-red-500 font-medium">
+                                  Booked
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-center py-8">
+                      Please select a date to view available time slots
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
+                  disabled={!selectedDate}
+                  onClick={() => {
+                    alert("Class booked successfully!");
+                    setBookingOpen(false);
+                  }}
+                >
+                  Confirm Booking
+                </Button>
+              </div>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Working Cart Modal */}
+      <Dialog open={cartOpen} onOpenChange={setCartOpen}>
+        <DialogContent className="max-w-2xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
+          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
+            <X size={16} />
+          </DialogClose>
+
+          <div className="overflow-auto max-h-[90vh] p-8">
+            <DialogTitle className="text-3xl font-light text-center uppercase tracking-widest mb-6 text-gray-800">
+              Shopping Cart
+            </DialogTitle>
+
+            {cartItems.length === 0 ? (
+              <div className="text-center py-12">
+                <ShoppingCart
+                  className="mx-auto mb-4 text-gray-400"
+                  size={48}
+                />
+                <p className="text-gray-600">Your cart is empty</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {cartItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center space-x-4 border-b border-gray-200 pb-4"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h4 className="font-medium">{item.name}</h4>
+                      <p className="text-gray-600">${item.price}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => updateCartQuantity(item.id, -1)}
+                        className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span className="w-8 text-center">{item.quantity}</span>
+                      <button
+                        onClick={() => updateCartQuantity(item.id, 1)}
+                        className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">
+                        ${item.price * item.quantity}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex justify-between items-center text-xl font-medium">
+                    <span>Total:</span>
+                    <span>${cartTotal}</span>
+                  </div>
+                </div>
+
+                <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium">
+                  Proceed to Checkout
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Membership Plans Section */}
       <section className="py-24 bg-gray-50">
@@ -1006,6 +1106,113 @@ export default function SinglePageApp() {
         </div>
       </section>
 
+      {/* Studio Locations Section */}
+      <section id="locations" className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Studio Locations
+            </h2>
+            <p className="text-lg text-gray-600">
+              Find the studio nearest to you
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {studioLocations.map((location, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
+              >
+                <img
+                  src={location.image}
+                  alt={location.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-medium mb-4 flex items-center">
+                    <Building className="mr-2 text-pink-600" size={20} />
+                    {location.name}
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-2">
+                      <MapPinIcon className="text-gray-500 mt-1" size={16} />
+                      <p className="text-gray-600 text-sm">
+                        {location.address}
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Phone className="text-gray-500" size={16} />
+                      <p className="text-gray-600 text-sm">{location.phone}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <h4 className="font-medium mb-2">Amenities:</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {location.amenities.map((amenity, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center text-sm text-gray-600"
+                        >
+                          <CheckCircle
+                            className="text-pink-600 mr-1"
+                            size={12}
+                          />
+                          {amenity}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <Button className="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white">
+                    View on Map
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications & Affiliations Section */}
+      <section id="certifications" className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Certifications & Affiliations
+            </h2>
+            <p className="text-lg text-gray-600">
+              Trusted by leading wellness organizations
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {certifications.map((cert, index) => (
+              <div key={index} className="text-center group">
+                <div className="bg-gray-50 rounded-lg p-6 mb-4 group-hover:bg-gray-100 transition-colors">
+                  <img
+                    src={cert.logo}
+                    alt={cert.name}
+                    className="w-full h-20 object-contain mx-auto"
+                  />
+                </div>
+                <h3 className="font-medium text-sm text-gray-800">
+                  {cert.name}
+                </h3>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <div className="inline-flex items-center space-x-2 bg-green-50 text-green-800 px-4 py-2 rounded-full">
+              <Shield className="text-green-600" size={16} />
+              <span className="text-sm font-medium">
+                All instructors are certified and insured
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Products Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-8">
@@ -1039,10 +1246,13 @@ export default function SinglePageApp() {
                 </div>
                 <div className="p-6">
                   <h3 className="font-medium mb-2">{product.name}</h3>
-                  <p className="text-2xl font-light text-pink-600">
-                    {product.price}
+                  <p className="text-2xl font-light text-pink-600 mb-4">
+                    ${product.price}
                   </p>
-                  <Button className="w-full mt-4 bg-black hover:bg-pink-600 text-white">
+                  <Button
+                    className="w-full bg-black hover:bg-pink-600 text-white"
+                    onClick={() => addToCart(product)}
+                  >
                     Add to Cart
                   </Button>
                 </div>
