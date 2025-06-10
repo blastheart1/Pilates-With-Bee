@@ -227,7 +227,7 @@ export default function SinglePageApp() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMounted]);
 
-  // Prevent body scroll when overlay is open
+  // Prevent body scroll when overlay is open and close mobile menu
   React.useEffect(() => {
     const overlayOpen =
       enrollOverlay ||
@@ -235,10 +235,14 @@ export default function SinglePageApp() {
       cartOverlay ||
       memberPortalOverlay ||
       analyticsOverlay;
-    if (overlayOpen) {
+    if (overlayOpen || mobileMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+    }
+    // Close mobile menu when overlay opens
+    if (overlayOpen) {
+      setMobileMenuOpen(false);
     }
   }, [
     enrollOverlay,
@@ -246,6 +250,7 @@ export default function SinglePageApp() {
     cartOverlay,
     memberPortalOverlay,
     analyticsOverlay,
+    mobileMenuOpen,
   ]);
 
   const scrollToSection = (sectionId: string) => {
