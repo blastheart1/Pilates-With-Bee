@@ -2462,7 +2462,7 @@ export default function SinglePageApp() {
                         <div>
                           <h4 className="font-medium">{gift.name}</h4>
                           <p className="text-2xl font-light text-green-600">
-                            ${gift.price}
+                            ₱{gift.price.toLocaleString()}
                           </p>
                         </div>
                         <Button
