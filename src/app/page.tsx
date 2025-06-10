@@ -258,6 +258,8 @@ export default function SinglePageApp() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+    // Close mobile menu after navigation
+    setMobileMenuOpen(false);
   };
 
   const updateCartQuantity = (id: number, change: number) => {
