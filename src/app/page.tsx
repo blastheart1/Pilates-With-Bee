@@ -2031,22 +2031,26 @@ export default function SinglePageApp() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="font-semibold mb-4">Upcoming Classes</h3>
+                  <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
+                    <h3 className="font-semibold mb-4 text-base sm:text-lg">
+                      Upcoming Classes
+                    </h3>
                     <div className="space-y-3">
                       {memberData.upcomingClasses.map((class_, index) => (
                         <div
                           key={index}
-                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                          className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 bg-gray-50 rounded-lg space-y-2 sm:space-y-0"
                         >
-                          <div>
-                            <div className="font-medium">{class_.type}</div>
-                            <div className="text-sm text-gray-600">
+                          <div className="min-w-0">
+                            <div className="font-medium text-sm sm:text-base">
+                              {class_.type}
+                            </div>
+                            <div className="text-xs sm:text-sm text-gray-600">
                               with {class_.instructor}
                             </div>
                           </div>
-                          <div className="text-right text-sm">
-                            <div>{class_.date}</div>
+                          <div className="text-left sm:text-right text-xs sm:text-sm flex-shrink-0">
+                            <div className="font-medium">{class_.date}</div>
                             <div className="text-gray-600">{class_.time}</div>
                           </div>
                         </div>
@@ -2054,14 +2058,18 @@ export default function SinglePageApp() {
                     </div>
                   </div>
 
-                  <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="font-semibold mb-4">Current Goals</h3>
+                  <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
+                    <h3 className="font-semibold mb-4 text-base sm:text-lg">
+                      Current Goals
+                    </h3>
                     <div className="space-y-4">
                       {memberData.goals.map((goal, index) => (
                         <div key={index}>
                           <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium">{goal.name}</span>
-                            <span className="text-sm text-gray-600">
+                            <span className="font-medium text-sm sm:text-base truncate pr-2">
+                              {goal.name}
+                            </span>
+                            <span className="text-xs sm:text-sm text-gray-600 flex-shrink-0">
                               {goal.progress}%
                             </span>
                           </div>
