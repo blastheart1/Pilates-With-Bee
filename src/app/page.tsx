@@ -1176,12 +1176,16 @@ export default function SinglePageApp() {
             </div>
 
             <div className="text-center pt-4">
-              <Button
+              <EnhancedButton
                 type="submit"
+                loading={loading}
                 className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
+                disabled={loading}
               >
-                Complete Pre-Assessment & Schedule Consultation
-              </Button>
+                {loading
+                  ? "Processing..."
+                  : "Complete Pre-Assessment & Schedule Consultation"}
+              </EnhancedButton>
               <p className="text-sm text-gray-600 mt-3">
                 We'll review your information and contact you within 24 hours to
                 schedule your complimentary consultation
