@@ -106,6 +106,7 @@ export default function SinglePageApp() {
   const [selectedMembership, setSelectedMembership] = useState("");
   const [newsletter, setNewsletter] = useState("");
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [membershipTab, setMembershipTab] = useState("individual");
   const [currentPortalTab, setCurrentPortalTab] = useState("dashboard");
   const [currentAnalyticsTab, setCurrentAnalyticsTab] = useState("progress");
