@@ -2801,7 +2801,7 @@ export default function SinglePageApp() {
                   <Phone className="text-pink-600" size={24} />
                   <div>
                     <div className="font-medium">Phone</div>
-                    <div className="text-gray-300">+1 (555) 123-4567</div>
+                    <div className="text-gray-300">+63 (917) 123-4567</div>
                   </div>
                 </div>
 
@@ -2822,7 +2822,7 @@ export default function SinglePageApp() {
                       <br />
                       Mind & Body District
                       <br />
-                      Healthy City, HC 12345
+                      Makati City, Metro Manila
                     </div>
                   </div>
                 </div>
