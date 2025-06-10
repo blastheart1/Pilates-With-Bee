@@ -663,7 +663,7 @@ export default function SinglePageApp() {
       image:
         "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Morning flow to start the day right ��� Finding balance in movement and breath #pilates #mindfulmovement #morningpractice",
+        "Morning flow to start the day right ✨ Finding balance in movement and breath #pilates #mindfulmovement #morningpractice",
       likes: 342,
       comments: 28,
     },
@@ -1757,76 +1757,86 @@ export default function SinglePageApp() {
         </div>
       </Overlay>
 
-      {/* Enhanced Shopping Cart Overlay */}
+      {/* Enhanced Shopping Cart Overlay - Mobile Responsive */}
       <Overlay
         isOpen={cartOverlay}
         onClose={() => setCartOverlay(false)}
         title="Shopping Cart"
       >
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           {cartItems.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12">
               <ShoppingCart className="mx-auto mb-4 text-gray-400" size={48} />
               <p className="text-gray-600">Your cart is empty</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {cartItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center space-x-4 border-b border-gray-200 pb-4"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover rounded-lg"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium">{item.name}</h4>
-                    <p className="text-gray-600">
-                      ₱{item.price.toLocaleString()}
-                    </p>
-                    {item.type && (
-                      <span className="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
-                        {item.type}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => updateCartQuantity(item.id, -1)}
-                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span className="w-8 text-center">{item.quantity}</span>
-                    <button
-                      onClick={() => updateCartQuantity(item.id, 1)}
-                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">
-                      ₱{(item.price * item.quantity).toLocaleString()}
-                    </p>
+                <div key={item.id} className="border-b border-gray-200 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-20 h-20 sm:w-16 sm:h-16 object-cover rounded-lg mx-auto sm:mx-0 flex-shrink-0"
+                    />
+                    <div className="flex-1 text-center sm:text-left min-w-0">
+                      <h4 className="font-medium text-sm sm:text-base">
+                        {item.name}
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        ₱{item.price.toLocaleString()}
+                      </p>
+                      {item.type && (
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded capitalize mt-1 inline-block">
+                          {item.type}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Mobile Layout: Stacked */}
+                    <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => updateCartQuantity(item.id, -1)}
+                          className="w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors touch-target"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="w-8 text-center font-medium">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateCartQuantity(item.id, 1)}
+                          className="w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors touch-target"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+
+                      <div className="text-center sm:text-right">
+                        <p className="font-medium text-sm sm:text-base">
+                          ₱{(item.price * item.quantity).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
 
               <div className="border-t border-gray-200 pt-4">
-                <div className="flex justify-between items-center text-xl font-medium">
+                <div className="flex justify-between items-center text-lg sm:text-xl font-medium">
                   <span>Total:</span>
                   <span>₱{cartTotal.toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button className="bg-gray-600 hover:bg-gray-700 text-white">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <Button className="bg-gray-600 hover:bg-gray-700 text-white touch-target py-3 text-sm sm:text-base">
                   Continue Shopping
                 </Button>
-                <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                <Button className="bg-pink-600 hover:bg-pink-700 text-white touch-target py-3 text-sm sm:text-base">
                   Proceed to Checkout
                 </Button>
               </div>
