@@ -231,6 +231,37 @@ export default function SinglePageApp() {
   );
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+  // Loading Spinner Component
+  const LoadingSpinner = ({ size = 20 }: { size?: number }) => (
+    <div className="flex justify-center items-center">
+      <div
+        className="animate-spin rounded-full border-b-2 border-current"
+        style={{ width: size, height: size }}
+      />
+    </div>
+  );
+
+  // Enhanced Button Component with Loading State
+  const EnhancedButton = ({
+    children,
+    onClick,
+    loading: buttonLoading = false,
+    className = "",
+    disabled = false,
+    ...props
+  }: any) => (
+    <button
+      onClick={onClick}
+      disabled={disabled || buttonLoading}
+      className={`relative transition-all duration-300 hover:scale-105 active:scale-95 ${className} ${
+        disabled || buttonLoading ? "opacity-70 cursor-not-allowed" : ""
+      }`}
+      {...props}
+    >
+      {buttonLoading ? <LoadingSpinner /> : children}
+    </button>
+  );
+
   const membershipPlans = [
     {
       name: "Basic",
