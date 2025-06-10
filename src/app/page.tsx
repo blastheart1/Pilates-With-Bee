@@ -101,7 +101,7 @@ export default function SinglePageApp() {
             </div>
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <h1 className="text-2xl font-light tracking-[0.3em] text-white">
-                BEE'S PILATES
+                PWB
               </h1>
             </div>
             <div className="flex space-x-12">
