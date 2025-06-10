@@ -636,19 +636,23 @@ export default function SinglePageApp() {
   const certifications = [
     {
       name: "BASI Pilates",
-      logo: "https://via.placeholder.com/120x60/FF69B4/FFFFFF?text=BASI",
+      logo: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=120&h=60",
+      color: "bg-pink-100",
     },
     {
       name: "Registered Nutritionist Dietitian",
-      logo: "https://via.placeholder.com/120x60/32CD32/FFFFFF?text=RND",
+      logo: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=120&h=60",
+      color: "bg-green-100",
     },
     {
       name: "Continuing Education Alliance",
-      logo: "https://via.placeholder.com/120x60/4169E1/FFFFFF?text=CEA",
+      logo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=60",
+      color: "bg-blue-100",
     },
     {
       name: "Yoga Alliance",
-      logo: "https://via.placeholder.com/120x60/FF6347/FFFFFF?text=YA",
+      logo: "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80&w=120&h=60",
+      color: "bg-orange-100",
     },
   ];
 
