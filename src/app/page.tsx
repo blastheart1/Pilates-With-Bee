@@ -2384,7 +2384,7 @@ export default function SinglePageApp() {
                     <div className="p-4">
                       <h4 className="font-medium mb-2">{product.name}</h4>
                       <p className="text-xl font-light text-pink-600 mb-3">
-                        ${product.price}
+                        ₱{product.price.toLocaleString()}
                       </p>
                       <Button
                         className="w-full bg-black hover:bg-pink-600 text-white"
