@@ -278,32 +278,68 @@ export default function SinglePageApp() {
     </button>
   );
 
+  // Error Boundary Component
+  const ErrorBoundary = ({
+    children,
+    fallback,
+  }: {
+    children: React.ReactNode;
+    fallback: React.ReactNode;
+  }) => {
+    const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+      const handleError = () => setHasError(true);
+      window.addEventListener("error", handleError);
+      return () => window.removeEventListener("error", handleError);
+    }, []);
+
+    if (hasError) {
+      return <>{fallback}</>;
+    }
+
+    return <>{children}</>;
+  };
+
   // Client-side Instagram Feed Component
   const InstagramFeed = () => {
     const [feedLoaded, setFeedLoaded] = useState(false);
+    const [feedError, setFeedError] = useState(false);
 
     useEffect(() => {
       if (!isMounted || !instagramLoaded) return;
 
-      // Load Elfsight script dynamically
-      const script = document.createElement("script");
-      script.src = "https://static.elfsight.com/platform/platform.js";
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        setFeedLoaded(true);
-      };
-      document.head.appendChild(script);
+      try {
+        // Load Elfsight script dynamically
+        const script = document.createElement("script");
+        script.src = "https://static.elfsight.com/platform/platform.js";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          setTimeout(() => setFeedLoaded(true), 2000);
+        };
+        script.onerror = () => {
+          setFeedError(true);
+        };
+        document.head.appendChild(script);
 
-      return () => {
-        // Cleanup script on unmount
-        const existingScript = document.querySelector(
-          'script[src="https://static.elfsight.com/platform/platform.js"]',
-        );
-        if (existingScript) {
-          existingScript.remove();
-        }
-      };
+        return () => {
+          // Cleanup script on unmount
+          try {
+            const existingScript = document.querySelector(
+              'script[src="https://static.elfsight.com/platform/platform.js"]',
+            );
+            if (existingScript) {
+              existingScript.remove();
+            }
+          } catch (error) {
+            console.warn("Error cleaning up Instagram script:", error);
+          }
+        };
+      } catch (error) {
+        console.warn("Error loading Instagram feed:", error);
+        setFeedError(true);
+      }
     }, [isMounted, instagramLoaded]);
 
     if (!isMounted || !instagramLoaded) {
@@ -317,21 +353,61 @@ export default function SinglePageApp() {
       );
     }
 
+    if (feedError) {
+      return (
+        <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+          <div className="text-center">
+            <Instagram className="mx-auto mb-4 text-gray-400" size={48} />
+            <p className="text-gray-600">Unable to load Instagram feed</p>
+            <a
+              href="https://instagram.com/the_hapi_bee/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-pink-600 hover:text-pink-700 font-medium mt-2 inline-block"
+            >
+              View on Instagram →
+            </a>
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className="w-full">
-        <div
-          className="elfsight-app-9c50c023-a35e-4c59-91b4-28120ab48c98"
-          data-elfsight-app-lazy
-        />
-        {!feedLoaded && (
-          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
+      <ErrorBoundary
+        fallback={
+          <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
             <div className="text-center">
-              <LoadingSpinner size={24} />
-              <p className="mt-2 text-gray-600 text-sm">Loading posts...</p>
+              <Instagram className="mx-auto mb-4 text-gray-400" size={48} />
+              <p className="text-gray-600">
+                Instagram feed temporarily unavailable
+              </p>
+              <a
+                href="https://instagram.com/the_hapi_bee/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink-600 hover:text-pink-700 font-medium mt-2 inline-block"
+              >
+                View on Instagram →
+              </a>
             </div>
           </div>
-        )}
-      </div>
+        }
+      >
+        <div className="w-full">
+          <div
+            className="elfsight-app-9c50c023-a35e-4c59-91b4-28120ab48c98"
+            data-elfsight-app-lazy
+          />
+          {!feedLoaded && (
+            <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center rounded-lg">
+              <div className="text-center">
+                <LoadingSpinner size={24} />
+                <p className="mt-2 text-gray-600 text-sm">Loading posts...</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </ErrorBoundary>
     );
   };
 
