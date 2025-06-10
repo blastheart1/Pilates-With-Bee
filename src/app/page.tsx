@@ -2642,9 +2642,33 @@ export default function SinglePageApp() {
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white">
-                    View on Map
-                  </Button>
+                  <div className="flex space-x-2 mt-4">
+                    <Button
+                      className="flex-1 bg-pink-600 hover:bg-pink-700 text-white"
+                      onClick={() =>
+                        window.open(
+                          `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`,
+                          "_blank",
+                        )
+                      }
+                    >
+                      <MapPinIcon size={16} className="mr-2" />
+                      View on Map
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() =>
+                        window.open(
+                          `https://wa.me/639171234567?text=Hi!%20I'd%20like%20to%20know%20more%20about%20the%20${location.name}%20location.`,
+                          "_blank",
+                        )
+                      }
+                    >
+                      <Phone size={16} className="mr-2" />
+                      Call
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
