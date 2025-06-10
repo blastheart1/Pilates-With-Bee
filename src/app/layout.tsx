@@ -285,11 +285,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
 
-        {/* Elfsight Instagram Widget */}
-        <Script
-          src="https://static.elfsight.com/platform/platform.js"
-          strategy="lazyOnload"
-        />
+        {/* Elfsight script now loaded dynamically in component to prevent hydration issues */}
 
         {/* Google Analytics - Replace with your GA4 ID */}
         <Script
