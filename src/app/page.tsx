@@ -1270,7 +1270,9 @@ export default function SinglePageApp() {
                   />
                   <div className="flex-1">
                     <h4 className="font-medium">{item.name}</h4>
-                    <p className="text-gray-600">${item.price}</p>
+                    <p className="text-gray-600">
+                      ₱{item.price.toLocaleString()}
+                    </p>
                     {item.type && (
                       <span className="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
                         {item.type}
