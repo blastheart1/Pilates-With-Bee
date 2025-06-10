@@ -663,7 +663,7 @@ export default function SinglePageApp() {
       image:
         "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Morning flow to start the day right ✨ Finding balance in movement and breath #pilates #mindfulmovement #morningpractice",
+        "Morning flow to start the day right ��� Finding balance in movement and breath #pilates #mindfulmovement #morningpractice",
       likes: 342,
       comments: 28,
     },
@@ -2091,12 +2091,14 @@ export default function SinglePageApp() {
             )}
 
             {currentPortalTab === "bookings" && (
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-semibold">My Bookings</h3>
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
+                  <h3 className="text-lg sm:text-xl font-semibold">
+                    My Bookings
+                  </h3>
                   <Button
                     onClick={() => setBookingOverlay(true)}
-                    className="bg-pink-600 hover:bg-pink-700 text-white"
+                    className="bg-pink-600 hover:bg-pink-700 text-white w-full sm:w-auto touch-target"
                   >
                     Book New Class
                   </Button>
@@ -2104,32 +2106,39 @@ export default function SinglePageApp() {
 
                 <div className="bg-white rounded-lg shadow-sm border">
                   <div className="p-4 border-b border-gray-200">
-                    <h4 className="font-medium">Upcoming Classes</h4>
+                    <h4 className="font-medium text-base sm:text-lg">
+                      Upcoming Classes
+                    </h4>
                   </div>
                   <div className="divide-y divide-gray-200">
                     {memberData.upcomingClasses.map((class_, index) => (
-                      <div
-                        key={index}
-                        className="p-4 flex justify-between items-center"
-                      >
-                        <div>
-                          <div className="font-medium">{class_.type}</div>
-                          <div className="text-sm text-gray-600">
-                            {class_.date} at {class_.time} with{" "}
-                            {class_.instructor}
+                      <div key={index} className="p-4">
+                        <div className="flex flex-col space-y-3 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
+                          <div className="min-w-0">
+                            <div className="font-medium text-sm sm:text-base">
+                              {class_.type}
+                            </div>
+                            <div className="text-xs sm:text-sm text-gray-600">
+                              {class_.date} at {class_.time} with{" "}
+                              {class_.instructor}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
-                            Reschedule
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 border-red-600 hover:bg-red-50"
-                          >
-                            Cancel
-                          </Button>
+                          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="w-full sm:w-auto touch-target text-xs sm:text-sm"
+                            >
+                              Reschedule
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="w-full sm:w-auto text-red-600 border-red-600 hover:bg-red-50 touch-target text-xs sm:text-sm"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     ))}
