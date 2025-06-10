@@ -136,6 +136,7 @@ export default function SinglePageApp() {
   const [membershipTab, setMembershipTab] = useState("individual");
   const [currentPortalTab, setCurrentPortalTab] = useState("dashboard");
   const [currentAnalyticsTab, setCurrentAnalyticsTab] = useState("progress");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Member Data (mock)
   const [memberData, setMemberData] = useState({
