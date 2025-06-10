@@ -1,14 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,12 +45,41 @@ import {
   GraduationCap,
   Certificate,
   MapPinIcon,
+  User,
+  BarChart3,
+  Activity,
+  TrendingUp as TrendingUpIcon,
+  Repeat,
+  Clock4,
+  History,
+  Star as StarIcon,
+  Crown,
+  Zap,
+  Flame,
+  Trophy,
+  AlertCircle,
+  Download,
+  Video,
+  FileText,
+  RefreshCw,
+  Smartphone,
+  Watch,
+  Scale,
+  Utensils,
+  PieChart,
 } from "lucide-react";
 
 export default function SinglePageApp() {
-  const [enrollOpen, setEnrollOpen] = useState(false);
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
+  // Overlay States
+  const [enrollOverlay, setEnrollOverlay] = useState(false);
+  const [bookingOverlay, setBookingOverlay] = useState(false);
+  const [cartOverlay, setCartOverlay] = useState(false);
+  const [memberPortalOverlay, setMemberPortalOverlay] = useState(false);
+  const [analyticsOverlay, setAnalyticsOverlay] = useState(false);
+
+  // App States
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -67,6 +88,7 @@ export default function SinglePageApp() {
       quantity: 1,
       image:
         "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+      type: "physical",
     },
     {
       id: 2,
@@ -75,6 +97,7 @@ export default function SinglePageApp() {
       quantity: 2,
       image:
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      type: "physical",
     },
   ]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -83,6 +106,57 @@ export default function SinglePageApp() {
   const [selectedMembership, setSelectedMembership] = useState("");
   const [newsletter, setNewsletter] = useState("");
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
+  const [membershipTab, setMembershipTab] = useState("individual");
+  const [currentPortalTab, setCurrentPortalTab] = useState("dashboard");
+  const [currentAnalyticsTab, setCurrentAnalyticsTab] = useState("progress");
+
+  // Member Data (mock)
+  const [memberData, setMemberData] = useState({
+    name: "Sarah Johnson",
+    memberSince: "January 2024",
+    membershipType: "Premium",
+    classesAttended: 24,
+    classesRemaining: 4,
+    loyaltyPoints: 2850,
+    nextReward: 3000,
+    upcomingClasses: [
+      {
+        date: "2024-03-20",
+        time: "9:00 AM",
+        instructor: "Bee",
+        type: "Group Pilates",
+      },
+      {
+        date: "2024-03-22",
+        time: "11:00 AM",
+        instructor: "Sarah",
+        type: "Private Session",
+      },
+    ],
+    classHistory: [
+      {
+        date: "2024-03-15",
+        instructor: "Bee",
+        type: "Group Pilates",
+        rating: 5,
+      },
+      { date: "2024-03-13", instructor: "Mike", type: "Core Focus", rating: 4 },
+      { date: "2024-03-11", instructor: "Bee", type: "Flexibility", rating: 5 },
+    ],
+    healthMetrics: {
+      weight: 135,
+      bodyFat: 18,
+      muscleMass: 45,
+      flexibility: 78,
+      strength: 85,
+      endurance: 72,
+    },
+    goals: [
+      { name: "Lose 10 lbs", progress: 70, target: "June 2024" },
+      { name: "Touch toes", progress: 85, target: "April 2024" },
+      { name: "20 push-ups", progress: 60, target: "May 2024" },
+    ],
+  });
 
   // Check if hero buttons are out of view and show floating buttons
   useEffect(() => {
@@ -90,7 +164,6 @@ export default function SinglePageApp() {
       const sections = ["home", "meet-bee", "testimonials", "faqs", "contact"];
       const scrollPosition = window.scrollY + 100;
 
-      // Show floating buttons when scrolled past hero section (1000px is approximately where hero ends)
       setShowFloatingButtons(window.scrollY > 800);
 
       for (const sectionId of sections) {
@@ -111,17 +184,26 @@ export default function SinglePageApp() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent body scroll when modal is open
+  // Prevent body scroll when overlay is open
   React.useEffect(() => {
-    const modalOpen = enrollOpen || bookingOpen || cartOpen;
-    if (modalOpen) {
+    const overlayOpen =
+      enrollOverlay ||
+      bookingOverlay ||
+      cartOverlay ||
+      memberPortalOverlay ||
+      analyticsOverlay;
+    if (overlayOpen) {
       document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = "15px";
     } else {
       document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
     }
-  }, [enrollOpen, bookingOpen, cartOpen]);
+  }, [
+    enrollOverlay,
+    bookingOverlay,
+    cartOverlay,
+    memberPortalOverlay,
+    analyticsOverlay,
+  ]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -161,6 +243,7 @@ export default function SinglePageApp() {
         "Community Access",
       ],
       popular: false,
+      type: "individual",
     },
     {
       name: "Premium",
@@ -175,6 +258,7 @@ export default function SinglePageApp() {
         "Priority Booking",
       ],
       popular: true,
+      type: "individual",
     },
     {
       name: "Unlimited",
@@ -189,6 +273,93 @@ export default function SinglePageApp() {
         "VIP Support",
       ],
       popular: false,
+      type: "individual",
+    },
+    {
+      name: "Family Basic",
+      price: "$169",
+      period: "/month",
+      classes: "8 Classes (2 people)",
+      features: [
+        "Group Classes for 2",
+        "Family Nutrition Guide",
+        "Equipment Included",
+        "Family Challenges",
+      ],
+      popular: false,
+      type: "family",
+    },
+    {
+      name: "Family Premium",
+      price: "$299",
+      period: "/month",
+      classes: "16 Classes + Nutrition",
+      features: [
+        "Group Classes for 2",
+        "2 Private Sessions",
+        "Family Nutrition Plan",
+        "Kids Classes",
+        "Priority Booking",
+      ],
+      popular: true,
+      type: "family",
+    },
+  ];
+
+  const digitalProducts = [
+    {
+      id: 7,
+      name: "30-Day Pilates Program",
+      price: 79,
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      type: "digital",
+      description: "Complete video series with nutrition guide",
+    },
+    {
+      id: 8,
+      name: "Nutrition Meal Plans",
+      price: 49,
+      image:
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80",
+      type: "digital",
+      description: "12 weeks of personalized meal plans",
+    },
+    {
+      id: 9,
+      name: "Meditation & Mindfulness",
+      price: 39,
+      image:
+        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80",
+      type: "digital",
+      description: "Guided meditation videos and techniques",
+    },
+  ];
+
+  const giftCertificates = [
+    { id: 10, name: "1 Private Session", price: 120, type: "gift" },
+    { id: 11, name: "5-Class Package", price: 250, type: "gift" },
+    { id: 12, name: "$100 Gift Card", price: 100, type: "gift" },
+    { id: 13, name: "$250 Gift Card", price: 250, type: "gift" },
+  ];
+
+  const subscriptionBoxes = [
+    {
+      id: 14,
+      name: "Monthly Wellness Box",
+      price: 49,
+      period: "/month",
+      type: "subscription",
+      description: "Curated wellness products, supplements, and workout gear",
+    },
+    {
+      id: 15,
+      name: "Quarterly Premium Box",
+      price: 129,
+      period: "/quarter",
+      type: "subscription",
+      description:
+        "Premium products, exclusive content, and personalized items",
     },
   ];
 
@@ -199,6 +370,8 @@ export default function SinglePageApp() {
       price: 89,
       image:
         "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+      type: "physical",
+      stock: 15,
     },
     {
       id: 4,
@@ -206,6 +379,8 @@ export default function SinglePageApp() {
       price: 45,
       image:
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+      type: "physical",
+      stock: 8,
     },
     {
       id: 5,
@@ -213,6 +388,8 @@ export default function SinglePageApp() {
       price: 35,
       image:
         "https://images.unsplash.com/photo-1566133485067-2e65b0c42615?auto=format&fit=crop&q=80",
+      type: "physical",
+      stock: 20,
     },
     {
       id: 6,
@@ -220,10 +397,12 @@ export default function SinglePageApp() {
       price: 55,
       image:
         "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+      type: "physical",
+      stock: 12,
     },
   ];
 
-  const addToCart = (product: (typeof products)[0]) => {
+  const addToCart = (product: any) => {
     setCartItems((items) => {
       const existingItem = items.find((item) => item.id === product.id);
       if (existingItem) {
@@ -384,36 +563,42 @@ export default function SinglePageApp() {
       instructor: "Bee",
       location: "Studio A",
       available: true,
+      waitlist: 0,
     },
     {
       time: "11:00 AM",
       instructor: "Sarah",
       location: "Studio B",
       available: true,
+      waitlist: 2,
     },
     {
       time: "1:00 PM",
       instructor: "Bee",
       location: "Studio A",
       available: false,
+      waitlist: 5,
     },
     {
       time: "3:00 PM",
       instructor: "Mike",
       location: "Studio C",
       available: true,
+      waitlist: 0,
     },
     {
       time: "5:00 PM",
       instructor: "Bee",
       location: "Studio A",
       available: true,
+      waitlist: 1,
     },
     {
       time: "7:00 PM",
       instructor: "Sarah",
       location: "Studio B",
-      available: true,
+      available: false,
+      waitlist: 3,
     },
   ];
 
@@ -450,21 +635,57 @@ export default function SinglePageApp() {
   const certifications = [
     {
       name: "BASI Pilates",
-      logo: "https://images.unsplash.com/photo-1565264894740-ca0c3a01e2a3?auto=format&fit=crop&q=80",
+      logo: "https://via.placeholder.com/120x60/FF69B4/FFFFFF?text=BASI",
     },
     {
       name: "Registered Nutritionist Dietitian",
-      logo: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&q=80",
+      logo: "https://via.placeholder.com/120x60/32CD32/FFFFFF?text=RND",
     },
     {
       name: "Continuing Education Alliance",
-      logo: "https://images.unsplash.com/photo-1554475901-3905ba725ae8?auto=format&fit=crop&q=80",
+      logo: "https://via.placeholder.com/120x60/4169E1/FFFFFF?text=CEA",
     },
     {
       name: "Yoga Alliance",
-      logo: "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+      logo: "https://via.placeholder.com/120x60/FF6347/FFFFFF?text=YA",
     },
   ];
+
+  // Overlay Component
+  const Overlay = ({
+    isOpen,
+    onClose,
+    children,
+    title,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    children: React.ReactNode;
+    title?: string;
+  }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
+          <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            {title && (
+              <h2 className="text-2xl font-light tracking-wider uppercase">
+                {title}
+              </h2>
+            )}
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+            >
+              <X size={16} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto">{children}</div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="font-sans bg-white text-gray-900">
@@ -532,6 +753,16 @@ export default function SinglePageApp() {
                 Contact
               </button>
 
+              {isLoggedIn && (
+                <button
+                  onClick={() => setMemberPortalOverlay(true)}
+                  className="text-white hover:text-pink-400 transition-colors"
+                  title="Member Portal"
+                >
+                  <User size={18} />
+                </button>
+              )}
+
               <div className="w-px h-6 bg-white/30 mx-4"></div>
 
               {/* Social Media Icons */}
@@ -560,7 +791,7 @@ export default function SinglePageApp() {
                 <Music size={18} />
               </a>
               <button
-                onClick={() => setCartOpen(true)}
+                onClick={() => setCartOverlay(true)}
                 className="relative text-white hover:text-pink-400 transition-colors"
               >
                 <ShoppingCart size={18} />
@@ -575,7 +806,7 @@ export default function SinglePageApp() {
         </div>
       </nav>
 
-      {/* Floating Action Buttons - Show when hero buttons are out of view */}
+      {/* Floating Action Buttons */}
       <div
         className={`fixed bottom-8 right-8 z-50 flex flex-col space-y-4 transition-all duration-500 ${
           showFloatingButtons
@@ -584,14 +815,14 @@ export default function SinglePageApp() {
         }`}
       >
         <button
-          onClick={() => setEnrollOpen(true)}
+          onClick={() => setEnrollOverlay(true)}
           className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-colors"
         >
           <UserPlus size={16} />
           <span className="font-medium">Enroll Now</span>
         </button>
         <button
-          onClick={() => setBookingOpen(true)}
+          onClick={() => setBookingOverlay(true)}
           className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-colors"
         >
           <CalendarDays size={16} />
@@ -619,13 +850,13 @@ export default function SinglePageApp() {
             </p>
             <div className="mt-20 flex space-x-6">
               <button
-                onClick={() => setEnrollOpen(true)}
+                onClick={() => setEnrollOverlay(true)}
                 className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light"
               >
                 Enroll Now
               </button>
               <button
-                onClick={() => setBookingOpen(true)}
+                onClick={() => setBookingOverlay(true)}
                 className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-colors uppercase font-light"
               >
                 Book Class
@@ -638,311 +869,1292 @@ export default function SinglePageApp() {
         </div>
       </section>
 
-      {/* Enhanced Enroll Now Modal for New Users */}
-      <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
-        <DialogContent className="max-w-4xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
-          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
-            <X size={16} />
-          </DialogClose>
-
-          <div className="overflow-auto max-h-[90vh] p-8">
-            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-              Welcome to PWB
-            </DialogTitle>
-            <DialogDescription asChild>
-              <div className="text-center mb-8">
-                <p className="text-lg text-gray-600">
-                  Begin your wellness journey with our comprehensive
-                  pre-assessment
-                </p>
-              </div>
-            </DialogDescription>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert(
-                  "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
-                );
-                setEnrollOpen(false);
-              }}
-              className="space-y-8 text-gray-900"
-            >
-              {/* Personal Information */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Users className="mr-2 text-pink-600" size={20} />
-                  Personal Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="firstName" className="font-medium">
-                      First Name *
-                    </Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName" className="font-medium">
-                      Last Name *
-                    </Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email" className="font-medium">
-                      Email Address *
-                    </Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone" className="font-medium">
-                      Phone Number *
-                    </Label>
-                    <Input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Goals & Expectations */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Target className="mr-2 text-pink-600" size={20} />
-                  Goals & Expectations
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="goals" className="font-medium">
-                      Primary Fitness Goals *
-                    </Label>
-                    <Textarea
-                      id="goals"
-                      name="goals"
-                      rows={3}
-                      placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-center pt-4">
-                <Button
-                  type="submit"
-                  className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
-                >
-                  Complete Pre-Assessment & Schedule Consultation
-                </Button>
-                <p className="text-sm text-gray-600 mt-3">
-                  We'll review your information and contact you within 24 hours
-                  to schedule your complimentary consultation
-                </p>
-              </div>
-            </form>
+      {/* Enroll Now Overlay */}
+      <Overlay
+        isOpen={enrollOverlay}
+        onClose={() => setEnrollOverlay(false)}
+        title="Welcome to PWB"
+      >
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <p className="text-lg text-gray-600">
+              Begin your wellness journey with our comprehensive pre-assessment
+            </p>
           </div>
-        </DialogContent>
-      </Dialog>
 
-      {/* Enhanced Book Now Modal for Existing Users */}
-      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-        <DialogContent className="max-w-5xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
-          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
-            <X size={16} />
-          </DialogClose>
-
-          <div className="overflow-auto max-h-[90vh] p-8">
-            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-              Book Your Class
-            </DialogTitle>
-            <DialogDescription asChild>
-              <div className="text-center mb-8">
-                <p className="text-lg text-gray-600">
-                  Select your preferred date, time, and instructor
-                </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              alert(
+                "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
+              );
+              setEnrollOverlay(false);
+            }}
+            className="space-y-8 text-gray-900"
+          >
+            {/* Personal Information */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-medium mb-4 flex items-center">
+                <Users className="mr-2 text-pink-600" size={20} />
+                Personal Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="firstName" className="font-medium">
+                    First Name *
+                  </Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lastName" className="font-medium">
+                    Last Name *
+                  </Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email" className="font-medium">
+                    Email Address *
+                  </Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="phone" className="font-medium">
+                    Phone Number *
+                  </Label>
+                  <Input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    className="mt-1"
+                  />
+                </div>
               </div>
-            </DialogDescription>
+            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Calendar Section */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <CalendarIcon className="mr-2 text-pink-600" size={20} />
-                  Select Date
-                </h3>
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  className="rounded-md border w-full"
-                  disabled={(date) => date < new Date()}
+            {/* Health & Fitness Assessment */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-medium mb-4 flex items-center">
+                <Activity className="mr-2 text-pink-600" size={20} />
+                Health & Fitness Assessment
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="experience" className="font-medium">
+                    Pilates Experience *
+                  </Label>
+                  <select
+                    id="experience"
+                    name="experience"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
+                    required
+                  >
+                    <option value="">Select your level</option>
+                    <option value="beginner">Complete Beginner</option>
+                    <option value="some">Some Experience (1-6 months)</option>
+                    <option value="intermediate">
+                      Intermediate (6+ months)
+                    </option>
+                    <option value="advanced">Advanced (2+ years)</option>
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="fitnessLevel" className="font-medium">
+                    Overall Fitness Level *
+                  </Label>
+                  <select
+                    id="fitnessLevel"
+                    name="fitnessLevel"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
+                    required
+                  >
+                    <option value="">Select level</option>
+                    <option value="sedentary">Sedentary</option>
+                    <option value="lightly-active">Lightly Active</option>
+                    <option value="moderately-active">Moderately Active</option>
+                    <option value="very-active">Very Active</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mt-4">
+                <Label htmlFor="healthConditions" className="font-medium">
+                  Health Conditions & Injuries
+                </Label>
+                <Textarea
+                  id="healthConditions"
+                  name="healthConditions"
+                  rows={3}
+                  placeholder="Please list any current or past injuries, surgeries, chronic conditions, or physical limitations we should be aware of..."
+                  className="mt-1"
                 />
               </div>
+            </div>
 
-              {/* Time Slots & Details */}
+            {/* Goals & Wearable Integration */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-medium mb-4 flex items-center">
+                <Target className="mr-2 text-pink-600" size={20} />
+                Goals & Tracking Preferences
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="goals" className="font-medium">
+                    Primary Fitness Goals *
+                  </Label>
+                  <Textarea
+                    id="goals"
+                    name="goals"
+                    rows={3}
+                    placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">
+                    Do you use any fitness tracking devices?
+                  </Label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="wearables"
+                        value="fitbit"
+                        className="mr-2"
+                      />
+                      <Smartphone size={16} className="mr-1" />
+                      Fitbit
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="wearables"
+                        value="apple-watch"
+                        className="mr-2"
+                      />
+                      <Watch size={16} className="mr-1" />
+                      Apple Watch
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="wearables"
+                        value="garmin"
+                        className="mr-2"
+                      />
+                      <Activity size={16} className="mr-1" />
+                      Garmin
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="wearables"
+                        value="other"
+                        className="mr-2"
+                      />
+                      Other Device
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center pt-4">
+              <Button
+                type="submit"
+                className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
+              >
+                Complete Pre-Assessment & Schedule Consultation
+              </Button>
+              <p className="text-sm text-gray-600 mt-3">
+                We'll review your information and contact you within 24 hours to
+                schedule your complimentary consultation
+              </p>
+            </div>
+          </form>
+        </div>
+      </Overlay>
+
+      {/* Advanced Booking System Overlay */}
+      <Overlay
+        isOpen={bookingOverlay}
+        onClose={() => setBookingOverlay(false)}
+        title="Advanced Booking System"
+      >
+        <div className="p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Calendar Section */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-medium mb-4 flex items-center">
+                <CalendarIcon className="mr-2 text-pink-600" size={20} />
+                Select Date
+              </h3>
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border w-full"
+                disabled={(date) => date < new Date()}
+              />
+
+              {/* Recurring Options */}
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium mb-3 flex items-center">
+                  <Repeat className="mr-2 text-blue-600" size={16} />
+                  Recurring Booking Options
+                </h4>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recurring"
+                      value="none"
+                      className="mr-2"
+                      defaultChecked
+                    />
+                    One-time booking
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recurring"
+                      value="weekly"
+                      className="mr-2"
+                    />
+                    Same time weekly (4 weeks)
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recurring"
+                      value="monthly"
+                      className="mr-2"
+                    />
+                    Same time monthly (3 months)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Time Slots & Advanced Features */}
+            <div className="space-y-6">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-medium mb-4 flex items-center">
+                  <Clock className="mr-2 text-pink-600" size={20} />
+                  Available Time Slots
+                </h3>
+                {selectedDate ? (
+                  <div className="space-y-3">
+                    {availableSlots.map((slot, index) => (
+                      <div
+                        key={index}
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                          slot.available
+                            ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
+                            : "border-orange-200 bg-orange-50"
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="font-medium text-lg">
+                              {slot.time}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              with {slot.instructor}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {slot.location}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            {slot.available ? (
+                              <span className="text-green-600 font-medium">
+                                Available
+                              </span>
+                            ) : (
+                              <div className="text-center">
+                                <span className="text-orange-600 font-medium block">
+                                  Full
+                                </span>
+                                <button className="text-xs text-blue-600 hover:underline mt-1">
+                                  Join Waitlist ({slot.waitlist})
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center py-8">
+                    Please select a date to view available time slots
+                  </p>
+                )}
+              </div>
+
+              {/* Cancellation Policy */}
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                <h4 className="font-medium mb-2 flex items-center text-yellow-800">
+                  <AlertCircle className="mr-2" size={16} />
+                  Cancellation Policy
+                </h4>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Cancel up to 24 hours before class for full credit</li>
+                  <li>• 12-24 hours: 50% credit to your account</li>
+                  <li>
+                    • Less than 12 hours: No refund (emergency exceptions
+                    considered)
+                  </li>
+                  <li>• Recurring bookings can be paused anytime</li>
+                </ul>
+              </div>
+
+              <Button
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
+                disabled={!selectedDate}
+                onClick={() => {
+                  alert(
+                    "Class booked successfully! You'll receive a confirmation email shortly.",
+                  );
+                  setBookingOverlay(false);
+                }}
+              >
+                Confirm Booking
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Overlay>
+
+      {/* Enhanced Shopping Cart Overlay */}
+      <Overlay
+        isOpen={cartOverlay}
+        onClose={() => setCartOverlay(false)}
+        title="Shopping Cart"
+      >
+        <div className="p-8">
+          {cartItems.length === 0 ? (
+            <div className="text-center py-12">
+              <ShoppingCart className="mx-auto mb-4 text-gray-400" size={48} />
+              <p className="text-gray-600">Your cart is empty</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center space-x-4 border-b border-gray-200 pb-4"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium">{item.name}</h4>
+                    <p className="text-gray-600">${item.price}</p>
+                    {item.type && (
+                      <span className="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
+                        {item.type}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => updateCartQuantity(item.id, -1)}
+                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span className="w-8 text-center">{item.quantity}</span>
+                    <button
+                      onClick={() => updateCartQuantity(item.id, 1)}
+                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium">${item.price * item.quantity}</p>
+                  </div>
+                </div>
+              ))}
+
+              <div className="border-t border-gray-200 pt-4">
+                <div className="flex justify-between items-center text-xl font-medium">
+                  <span>Total:</span>
+                  <span>${cartTotal}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button className="bg-gray-600 hover:bg-gray-700 text-white">
+                  Continue Shopping
+                </Button>
+                <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                  Proceed to Checkout
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </Overlay>
+
+      {/* Member Portal Overlay */}
+      <Overlay
+        isOpen={memberPortalOverlay}
+        onClose={() => setMemberPortalOverlay(false)}
+        title="Member Portal"
+      >
+        <div className="flex h-full">
+          {/* Sidebar */}
+          <div className="w-64 bg-gray-50 p-6">
+            <div className="space-y-2">
+              <button
+                onClick={() => setCurrentPortalTab("dashboard")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "dashboard" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <BarChart3 className="inline mr-2" size={16} />
+                Dashboard
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("bookings")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "bookings" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <CalendarIcon className="inline mr-2" size={16} />
+                My Bookings
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("progress")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "progress" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <TrendingUpIcon className="inline mr-2" size={16} />
+                Progress Tracking
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("loyalty")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "loyalty" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <Crown className="inline mr-2" size={16} />
+                Loyalty Rewards
+              </button>
+              <button
+                onClick={() => setCurrentPortalTab("referrals")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentPortalTab === "referrals" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <Users className="inline mr-2" size={16} />
+                Referral Program
+              </button>
+              <button
+                onClick={() => setAnalyticsOverlay(true)}
+                className="w-full text-left p-3 rounded-lg hover:bg-gray-200"
+              >
+                <Activity className="inline mr-2" size={16} />
+                Advanced Analytics
+              </button>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 p-6">
+            {currentPortalTab === "dashboard" && (
               <div className="space-y-6">
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <Clock className="mr-2 text-pink-600" size={20} />
-                    Available Time Slots
-                  </h3>
-                  {selectedDate ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-pink-100 rounded-lg">
+                        <CalendarIcon className="text-pink-600" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.classesRemaining}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Classes Remaining
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Trophy className="text-blue-600" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.loyaltyPoints}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Loyalty Points
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <Flame className="text-green-600" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.classesAttended}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Classes Attended
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 className="font-semibold mb-4">Upcoming Classes</h3>
                     <div className="space-y-3">
-                      {availableSlots.map((slot, index) => (
+                      {memberData.upcomingClasses.map((class_, index) => (
                         <div
                           key={index}
-                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                            slot.available
-                              ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
-                              : "border-gray-100 bg-gray-100 cursor-not-allowed opacity-50"
-                          }`}
+                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
                         >
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-lg">
-                                {slot.time}
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                with {slot.instructor}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {slot.location}
-                              </div>
+                          <div>
+                            <div className="font-medium">{class_.type}</div>
+                            <div className="text-sm text-gray-600">
+                              with {class_.instructor}
                             </div>
-                            <div className="text-right">
-                              {slot.available ? (
-                                <span className="text-green-600 font-medium">
-                                  Available
-                                </span>
-                              ) : (
-                                <span className="text-red-500 font-medium">
-                                  Booked
-                                </span>
-                              )}
-                            </div>
+                          </div>
+                          <div className="text-right text-sm">
+                            <div>{class_.date}</div>
+                            <div className="text-gray-600">{class_.time}</div>
                           </div>
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <p className="text-gray-500 text-center py-8">
-                      Please select a date to view available time slots
-                    </p>
-                  )}
+                  </div>
+
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 className="font-semibold mb-4">Current Goals</h3>
+                    <div className="space-y-4">
+                      {memberData.goals.map((goal, index) => (
+                        <div key={index}>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-medium">{goal.name}</span>
+                            <span className="text-sm text-gray-600">
+                              {goal.progress}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-pink-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${goal.progress}%` }}
+                            ></div>
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            Target: {goal.target}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-
-                <Button
-                  className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
-                  disabled={!selectedDate}
-                  onClick={() => {
-                    alert("Class booked successfully!");
-                    setBookingOpen(false);
-                  }}
-                >
-                  Confirm Booking
-                </Button>
               </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+            )}
 
-      {/* Working Cart Modal */}
-      <Dialog open={cartOpen} onOpenChange={setCartOpen}>
-        <DialogContent className="max-w-2xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
-          <DialogClose className="absolute right-6 top-6 text-2xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center">
-            <X size={16} />
-          </DialogClose>
-
-          <div className="overflow-auto max-h-[90vh] p-8">
-            <DialogTitle className="text-3xl font-light text-center uppercase tracking-widest mb-6 text-gray-800">
-              Shopping Cart
-            </DialogTitle>
-
-            {cartItems.length === 0 ? (
-              <div className="text-center py-12">
-                <ShoppingCart
-                  className="mx-auto mb-4 text-gray-400"
-                  size={48}
-                />
-                <p className="text-gray-600">Your cart is empty</p>
-              </div>
-            ) : (
+            {currentPortalTab === "bookings" && (
               <div className="space-y-6">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center space-x-4 border-b border-gray-200 pb-4"
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold">My Bookings</h3>
+                  <Button
+                    onClick={() => setBookingOverlay(true)}
+                    className="bg-pink-600 hover:bg-pink-700 text-white"
                   >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium">{item.name}</h4>
-                      <p className="text-gray-600">${item.price}</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => updateCartQuantity(item.id, -1)}
-                        className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
-                      >
-                        <Minus size={14} />
-                      </button>
-                      <span className="w-8 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => updateCartQuantity(item.id, 1)}
-                        className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">
-                        ${item.price * item.quantity}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                    Book New Class
+                  </Button>
+                </div>
 
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex justify-between items-center text-xl font-medium">
-                    <span>Total:</span>
-                    <span>${cartTotal}</span>
+                <div className="bg-white rounded-lg shadow-sm border">
+                  <div className="p-4 border-b border-gray-200">
+                    <h4 className="font-medium">Upcoming Classes</h4>
+                  </div>
+                  <div className="divide-y divide-gray-200">
+                    {memberData.upcomingClasses.map((class_, index) => (
+                      <div
+                        key={index}
+                        className="p-4 flex justify-between items-center"
+                      >
+                        <div>
+                          <div className="font-medium">{class_.type}</div>
+                          <div className="text-sm text-gray-600">
+                            {class_.date} at {class_.time} with{" "}
+                            {class_.instructor}
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="outline">
+                            Reschedule
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600 border-red-600 hover:bg-red-50"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium">
-                  Proceed to Checkout
-                </Button>
+                <div className="bg-white rounded-lg shadow-sm border">
+                  <div className="p-4 border-b border-gray-200">
+                    <h4 className="font-medium">Class History</h4>
+                  </div>
+                  <div className="divide-y divide-gray-200">
+                    {memberData.classHistory.map((class_, index) => (
+                      <div
+                        key={index}
+                        className="p-4 flex justify-between items-center"
+                      >
+                        <div>
+                          <div className="font-medium">{class_.type}</div>
+                          <div className="text-sm text-gray-600">
+                            {class_.date} with {class_.instructor}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                              <StarIcon
+                                key={i}
+                                size={16}
+                                className={
+                                  i < class_.rating
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-gray-300"
+                                }
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentPortalTab === "loyalty" && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-lg">
+                  <h3 className="text-xl font-bold mb-2">Loyalty Rewards</h3>
+                  <div className="flex items-center space-x-4">
+                    <div>
+                      <div className="text-3xl font-bold">
+                        {memberData.loyaltyPoints}
+                      </div>
+                      <div className="text-purple-100">Current Points</div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="bg-white/20 rounded-full h-3">
+                        <div
+                          className="bg-white h-3 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${(memberData.loyaltyPoints / memberData.nextReward) * 100}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="text-sm text-purple-100 mt-1">
+                        {memberData.nextReward - memberData.loyaltyPoints}{" "}
+                        points to next reward
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Available Rewards</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 border rounded-lg">
+                        <div>
+                          <div className="font-medium">Free Class</div>
+                          <div className="text-sm text-gray-600">
+                            1,000 points
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="bg-pink-600 hover:bg-pink-700"
+                        >
+                          Redeem
+                        </Button>
+                      </div>
+                      <div className="flex justify-between items-center p-3 border rounded-lg">
+                        <div>
+                          <div className="font-medium">Private Session</div>
+                          <div className="text-sm text-gray-600">
+                            2,500 points
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="bg-pink-600 hover:bg-pink-700"
+                        >
+                          Redeem
+                        </Button>
+                      </div>
+                      <div className="flex justify-between items-center p-3 border rounded-lg opacity-50">
+                        <div>
+                          <div className="font-medium">Wellness Retreat</div>
+                          <div className="text-sm text-gray-600">
+                            5,000 points
+                          </div>
+                        </div>
+                        <Button size="sm" disabled>
+                          Need {5000 - memberData.loyaltyPoints} more
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Earn More Points</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span>Attend a class</span>
+                        <span className="font-medium text-green-600">
+                          +50 points
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Complete a program</span>
+                        <span className="font-medium text-green-600">
+                          +200 points
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Refer a friend</span>
+                        <span className="font-medium text-green-600">
+                          +500 points
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Write a review</span>
+                        <span className="font-medium text-green-600">
+                          +100 points
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentPortalTab === "referrals" && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-xl font-bold mb-2">Referral Program</h3>
+                  <p className="text-blue-100">
+                    Share the wellness journey and earn rewards!
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Your Referral Code</h4>
+                    <div className="bg-gray-100 p-4 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-pink-600">
+                        SARAH2024
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        Share this code with friends
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4" variant="outline">
+                      <Share className="mr-2" size={16} />
+                      Share Link
+                    </Button>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Referral Benefits</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                          <Gift className="text-green-600" size={16} />
+                        </div>
+                        <div>
+                          <div className="font-medium">Friend gets 20% off</div>
+                          <div className="text-sm text-gray-600">
+                            First month discount
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Star className="text-blue-600" size={16} />
+                        </div>
+                        <div>
+                          <div className="font-medium">You get 500 points</div>
+                          <div className="text-sm text-gray-600">
+                            When they join
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                          <Crown className="text-purple-600" size={16} />
+                        </div>
+                        <div>
+                          <div className="font-medium">
+                            Free class at 5 referrals
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Milestone reward
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <h4 className="font-semibold mb-4">Your Referrals (3)</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="font-medium">Emily Johnson</div>
+                        <div className="text-sm text-gray-600">
+                          Joined January 2024
+                        </div>
+                      </div>
+                      <div className="text-green-600 font-medium">
+                        +500 points
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="font-medium">Mike Chen</div>
+                        <div className="text-sm text-gray-600">
+                          Joined February 2024
+                        </div>
+                      </div>
+                      <div className="text-green-600 font-medium">
+                        +500 points
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="font-medium">Lisa Park</div>
+                        <div className="text-sm text-gray-600">
+                          Joined March 2024
+                        </div>
+                      </div>
+                      <div className="text-green-600 font-medium">
+                        +500 points
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Overlay>
 
-      {/* Membership Plans Section */}
+      {/* Advanced Analytics Overlay */}
+      <Overlay
+        isOpen={analyticsOverlay}
+        onClose={() => setAnalyticsOverlay(false)}
+        title="Advanced Analytics"
+      >
+        <div className="flex h-full">
+          {/* Analytics Sidebar */}
+          <div className="w-64 bg-gray-50 p-6">
+            <div className="space-y-2">
+              <button
+                onClick={() => setCurrentAnalyticsTab("progress")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentAnalyticsTab === "progress" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <TrendingUp className="inline mr-2" size={16} />
+                Progress Tracking
+              </button>
+              <button
+                onClick={() => setCurrentAnalyticsTab("nutrition")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentAnalyticsTab === "nutrition" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <Utensils className="inline mr-2" size={16} />
+                Nutrition Log
+              </button>
+              <button
+                onClick={() => setCurrentAnalyticsTab("attendance")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentAnalyticsTab === "attendance" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <CalendarIcon className="inline mr-2" size={16} />
+                Class Attendance
+              </button>
+              <button
+                onClick={() => setCurrentAnalyticsTab("wearables")}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${currentAnalyticsTab === "wearables" ? "bg-pink-600 text-white" : "hover:bg-gray-200"}`}
+              >
+                <Watch className="inline mr-2" size={16} />
+                Wearable Data
+              </button>
+            </div>
+          </div>
+
+          {/* Analytics Content */}
+          <div className="flex-1 p-6">
+            {currentAnalyticsTab === "progress" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <Scale className="text-blue-600" size={24} />
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.healthMetrics.weight} lbs
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Current Weight
+                        </div>
+                        <div className="text-xs text-green-600">
+                          -5 lbs this month
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <Activity className="text-red-600" size={24} />
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.healthMetrics.bodyFat}%
+                        </div>
+                        <div className="text-sm text-gray-600">Body Fat</div>
+                        <div className="text-xs text-green-600">
+                          -2% this month
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <div className="flex items-center space-x-3">
+                      <Zap className="text-yellow-600" size={24} />
+                      <div>
+                        <div className="text-2xl font-bold">
+                          {memberData.healthMetrics.muscleMass} lbs
+                        </div>
+                        <div className="text-sm text-gray-600">Muscle Mass</div>
+                        <div className="text-xs text-green-600">
+                          +2 lbs this month
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <h4 className="font-semibold mb-4">Fitness Metrics</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span>Flexibility</span>
+                        <span className="text-sm text-gray-600">
+                          {memberData.healthMetrics.flexibility}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className="bg-blue-500 h-3 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${memberData.healthMetrics.flexibility}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span>Strength</span>
+                        <span className="text-sm text-gray-600">
+                          {memberData.healthMetrics.strength}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className="bg-red-500 h-3 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${memberData.healthMetrics.strength}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span>Endurance</span>
+                        <span className="text-sm text-gray-600">
+                          {memberData.healthMetrics.endurance}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className="bg-green-500 h-3 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${memberData.healthMetrics.endurance}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentAnalyticsTab === "nutrition" && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold">Nutrition Logging</h3>
+                  <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                    <Plus className="mr-2" size={16} />
+                    Log Meal
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-green-600">
+                      1,847
+                    </div>
+                    <div className="text-sm text-gray-600">Calories Today</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-blue-600">127g</div>
+                    <div className="text-sm text-gray-600">Protein</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-yellow-600">
+                      45g
+                    </div>
+                    <div className="text-sm text-gray-600">Fat</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-purple-600">
+                      203g
+                    </div>
+                    <div className="text-sm text-gray-600">Carbs</div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <h4 className="font-semibold mb-4">Today's Meals</h4>
+                  <div className="space-y-4">
+                    <div className="border-l-4 border-green-500 pl-4">
+                      <div className="font-medium">Breakfast</div>
+                      <div className="text-sm text-gray-600">
+                        Oatmeal with berries and protein powder
+                      </div>
+                      <div className="text-xs text-gray-500">387 calories</div>
+                    </div>
+                    <div className="border-l-4 border-blue-500 pl-4">
+                      <div className="font-medium">Lunch</div>
+                      <div className="text-sm text-gray-600">
+                        Grilled chicken salad with avocado
+                      </div>
+                      <div className="text-xs text-gray-500">542 calories</div>
+                    </div>
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="font-medium">Snack</div>
+                      <div className="text-sm text-gray-600">
+                        Greek yogurt with nuts
+                      </div>
+                      <div className="text-xs text-gray-500">186 calories</div>
+                    </div>
+                    <div className="border-l-4 border-red-500 pl-4">
+                      <div className="font-medium">Dinner</div>
+                      <div className="text-sm text-gray-600">
+                        Salmon with quinoa and vegetables
+                      </div>
+                      <div className="text-xs text-gray-500">732 calories</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentAnalyticsTab === "attendance" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-3xl font-bold text-pink-600">24</div>
+                    <div className="text-sm text-gray-600">
+                      Classes This Month
+                    </div>
+                    <div className="text-xs text-green-600">
+                      +6 from last month
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-3xl font-bold text-blue-600">89%</div>
+                    <div className="text-sm text-gray-600">Attendance Rate</div>
+                    <div className="text-xs text-green-600">Above average</div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-3xl font-bold text-purple-600">15</div>
+                    <div className="text-sm text-gray-600">Day Streak</div>
+                    <div className="text-xs text-blue-600">
+                      Personal record!
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                  <h4 className="font-semibold mb-4">Class Type Breakdown</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Group Pilates</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="w-16 bg-pink-500 h-2 rounded-full"></div>
+                        </div>
+                        <span className="text-sm">18 classes</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Private Sessions</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="w-6 bg-blue-500 h-2 rounded-full"></div>
+                        </div>
+                        <span className="text-sm">4 sessions</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Nutrition Consultations</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="w-4 bg-green-500 h-2 rounded-full"></div>
+                        </div>
+                        <span className="text-sm">2 sessions</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentAnalyticsTab === "wearables" && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-xl font-bold mb-2">
+                    Wearable Integration
+                  </h3>
+                  <p className="text-blue-100">
+                    Connect your devices for comprehensive health tracking
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Connected Devices</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <Watch className="text-green-600" size={20} />
+                          <span>Apple Watch Series 8</span>
+                        </div>
+                        <span className="text-green-600 text-sm">
+                          Connected
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <Activity className="text-gray-400" size={20} />
+                          <span>Fitbit Charge 5</span>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Connect
+                        </Button>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <Smartphone className="text-gray-400" size={20} />
+                          <span>MyFitnessPal</span>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Connect
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 className="font-semibold mb-4">Today's Data</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span>Steps</span>
+                        <span className="font-medium">8,247 / 10,000</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Heart Rate (avg)</span>
+                        <span className="font-medium">68 bpm</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Sleep</span>
+                        <span className="font-medium">7h 23m</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Active Minutes</span>
+                        <span className="font-medium">87 minutes</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-red-600">142</div>
+                    <div className="text-sm text-gray-600">Avg Heart Rate</div>
+                    <div className="text-xs text-green-600">
+                      During workouts
+                    </div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-blue-600">487</div>
+                    <div className="text-sm text-gray-600">Calories Burned</div>
+                    <div className="text-xs text-gray-500">Last workout</div>
+                  </div>
+                  <div className="bg-white p-6 rounded-lg shadow-sm border text-center">
+                    <div className="text-2xl font-bold text-purple-600">
+                      92%
+                    </div>
+                    <div className="text-sm text-gray-600">Recovery Score</div>
+                    <div className="text-xs text-green-600">Ready to train</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </Overlay>
+
+      {/* Enhanced Membership Plans Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-16">
@@ -952,48 +2164,70 @@ export default function SinglePageApp() {
             <p className="text-lg text-gray-600">
               Choose the perfect plan for your wellness journey
             </p>
+
+            {/* Plan Type Tabs */}
+            <div className="flex justify-center mt-8">
+              <div className="bg-white rounded-lg p-1 shadow-sm">
+                <button
+                  onClick={() => setMembershipTab("individual")}
+                  className={`px-6 py-2 rounded-md transition-colors ${membershipTab === "individual" ? "bg-pink-600 text-white" : "text-gray-600"}`}
+                >
+                  Individual Plans
+                </button>
+                <button
+                  onClick={() => setMembershipTab("family")}
+                  className={`px-6 py-2 rounded-md transition-colors ${membershipTab === "family" ? "bg-pink-600 text-white" : "text-gray-600"}`}
+                >
+                  Family Plans
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {membershipPlans.map((plan, index) => (
-              <div
-                key={index}
-                className={`relative bg-white rounded-lg shadow-lg p-8 ${plan.popular ? "ring-2 ring-pink-600 transform scale-105" : ""}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-sm">
-                    Most Popular
-                  </div>
-                )}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-light uppercase tracking-wider mb-2">
-                    {plan.name}
-                  </h3>
-                  <div className="text-4xl font-light mb-2">
-                    {plan.price}
-                    <span className="text-lg text-gray-600">{plan.period}</span>
-                  </div>
-                  <p className="text-gray-600">{plan.classes}</p>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center">
-                      <CheckCircle className="text-pink-600 mr-3" size={16} />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  className={`w-full ${plan.popular ? "bg-pink-600 hover:bg-pink-700" : "bg-black hover:bg-gray-800"} text-white`}
-                  onClick={() => {
-                    setSelectedMembership(plan.name);
-                    setEnrollOpen(true);
-                  }}
+            {membershipPlans
+              .filter((plan) => plan.type === membershipTab)
+              .map((plan, index) => (
+                <div
+                  key={index}
+                  className={`relative bg-white rounded-lg shadow-lg p-8 ${plan.popular ? "ring-2 ring-pink-600 transform scale-105" : ""}`}
                 >
-                  Choose Plan
-                </Button>
-              </div>
-            ))}
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-sm">
+                      Most Popular
+                    </div>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-light uppercase tracking-wider mb-2">
+                      {plan.name}
+                    </h3>
+                    <div className="text-4xl font-light mb-2">
+                      {plan.price}
+                      <span className="text-lg text-gray-600">
+                        {plan.period}
+                      </span>
+                    </div>
+                    <p className="text-gray-600">{plan.classes}</p>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-center">
+                        <CheckCircle className="text-pink-600 mr-3" size={16} />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    className={`w-full ${plan.popular ? "bg-pink-600 hover:bg-pink-700" : "bg-black hover:bg-gray-800"} text-white`}
+                    onClick={() => {
+                      setSelectedMembership(plan.name);
+                      setEnrollOverlay(true);
+                    }}
+                  >
+                    Choose Plan
+                  </Button>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -1106,8 +2340,180 @@ export default function SinglePageApp() {
         </div>
       </section>
 
+      {/* Enhanced E-commerce Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
+              Wellness Shop
+            </h2>
+            <p className="text-lg text-gray-600">
+              Premium products to support your wellness journey
+            </p>
+          </div>
+
+          {/* Product Categories */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            {/* Physical Products */}
+            <div>
+              <h3 className="text-xl font-semibold mb-6 flex items-center">
+                <Package className="mr-2 text-pink-600" size={20} />
+                Physical Products
+              </h3>
+              <div className="grid grid-cols-1 gap-6">
+                {products.map((product, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden group"
+                  >
+                    <div className="relative overflow-hidden h-48">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs">
+                        {product.stock} left
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-medium mb-2">{product.name}</h4>
+                      <p className="text-xl font-light text-pink-600 mb-3">
+                        ${product.price}
+                      </p>
+                      <Button
+                        className="w-full bg-black hover:bg-pink-600 text-white"
+                        onClick={() => addToCart(product)}
+                        disabled={product.stock === 0}
+                      >
+                        {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Digital Products */}
+            <div>
+              <h3 className="text-xl font-semibold mb-6 flex items-center">
+                <Download className="mr-2 text-blue-600" size={20} />
+                Digital Products
+              </h3>
+              <div className="space-y-6">
+                {digitalProducts.map((product, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden"
+                  >
+                    <div className="relative overflow-hidden h-32">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2 left-2 bg-blue-600 text-white rounded-full px-2 py-1 text-xs">
+                        Digital
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-medium mb-2">{product.name}</h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        {product.description}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-light text-blue-600">
+                          ${product.price}
+                        </span>
+                        <Button
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white"
+                          onClick={() => addToCart(product)}
+                        >
+                          Buy Now
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Gift Certificates & Subscriptions */}
+            <div className="space-y-8">
+              {/* Gift Certificates */}
+              <div>
+                <h3 className="text-xl font-semibold mb-6 flex items-center">
+                  <Gift className="mr-2 text-green-600" size={20} />
+                  Gift Certificates
+                </h3>
+                <div className="space-y-4">
+                  {giftCertificates.map((gift, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-lg shadow-lg p-4"
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-medium">{gift.name}</h4>
+                          <p className="text-2xl font-light text-green-600">
+                            ${gift.price}
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => addToCart(gift)}
+                        >
+                          <Gift size={16} className="mr-1" />
+                          Gift
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Subscription Boxes */}
+              <div>
+                <h3 className="text-xl font-semibold mb-6 flex items-center">
+                  <RefreshCw className="mr-2 text-purple-600" size={20} />
+                  Subscription Boxes
+                </h3>
+                <div className="space-y-4">
+                  {subscriptionBoxes.map((box, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-lg shadow-lg p-4"
+                    >
+                      <h4 className="font-medium mb-2">{box.name}</h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        {box.description}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xl font-light text-purple-600">
+                          ${box.price}
+                          {box.period}
+                        </span>
+                        <Button
+                          size="sm"
+                          className="bg-purple-600 hover:bg-purple-700 text-white"
+                          onClick={() => addToCart(box)}
+                        >
+                          Subscribe
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Studio Locations Section */}
-      <section id="locations" className="py-24 bg-gray-50">
+      <section id="locations" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
@@ -1174,7 +2580,7 @@ export default function SinglePageApp() {
       </section>
 
       {/* Certifications & Affiliations Section */}
-      <section id="certifications" className="py-24 bg-white">
+      <section id="certifications" className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
@@ -1188,7 +2594,7 @@ export default function SinglePageApp() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {certifications.map((cert, index) => (
               <div key={index} className="text-center group">
-                <div className="bg-gray-50 rounded-lg p-6 mb-4 group-hover:bg-gray-100 transition-colors">
+                <div className="bg-white rounded-lg p-6 mb-4 group-hover:bg-gray-100 transition-colors">
                   <img
                     src={cert.logo}
                     alt={cert.name}
@@ -1209,55 +2615,6 @@ export default function SinglePageApp() {
                 All instructors are certified and insured
               </span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Products Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-light mb-4 tracking-widest uppercase">
-              Wellness Shop
-            </h2>
-            <p className="text-lg text-gray-600">
-              Premium equipment to support your practice
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.map((product, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-lg overflow-hidden group"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all flex items-center justify-center">
-                    <ShoppingCart
-                      className="text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                      size={24}
-                    />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-medium mb-2">{product.name}</h3>
-                  <p className="text-2xl font-light text-pink-600 mb-4">
-                    ${product.price}
-                  </p>
-                  <Button
-                    className="w-full bg-black hover:bg-pink-600 text-white"
-                    onClick={() => addToCart(product)}
-                  >
-                    Add to Cart
-                  </Button>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
