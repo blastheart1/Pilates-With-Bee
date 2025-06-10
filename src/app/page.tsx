@@ -107,6 +107,8 @@ export default function SinglePageApp() {
   const [newsletter, setNewsletter] = useState("");
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [instagramLoaded, setInstagramLoaded] = useState(false);
   const [membershipTab, setMembershipTab] = useState("individual");
   const [currentPortalTab, setCurrentPortalTab] = useState("dashboard");
   const [currentAnalyticsTab, setCurrentAnalyticsTab] = useState("progress");
