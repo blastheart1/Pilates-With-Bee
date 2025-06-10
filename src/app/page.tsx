@@ -607,8 +607,8 @@ export default function SinglePageApp() {
     {
       name: "Downtown Studio",
       address:
-        "123 Wellness Street, Mind & Body District, Healthy City, HC 12345",
-      phone: "+1 (555) 123-4567",
+        "123 Wellness Street, Mind & Body District, Makati City, Metro Manila",
+      phone: "+63 (917) 123-4567",
       image:
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
       amenities: [
@@ -620,8 +620,8 @@ export default function SinglePageApp() {
     },
     {
       name: "Uptown Studio",
-      address: "456 Serenity Ave, Wellness Quarter, Healthy City, HC 12346",
-      phone: "+1 (555) 123-4568",
+      address: "456 Serenity Ave, Wellness Quarter, Quezon City, Metro Manila",
+      phone: "+63 (917) 123-4568",
       image:
         "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
       amenities: [
