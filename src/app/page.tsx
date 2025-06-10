@@ -423,7 +423,7 @@ export default function SinglePageApp() {
       rating: 5,
       text: "Bee transformed my approach to fitness. Her combination of Pilates and nutrition guidance helped me achieve results I never thought possible.",
       image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80&w=200&h=200",
       achievement: "Lost 25lbs & gained core strength",
     },
     {
@@ -431,7 +431,7 @@ export default function SinglePageApp() {
       rating: 5,
       text: "As a former athlete dealing with back issues, Bee's expertise in both movement and nutrition has been life-changing.",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
       achievement: "Eliminated chronic back pain",
     },
     {
@@ -439,7 +439,7 @@ export default function SinglePageApp() {
       rating: 5,
       text: "The holistic approach here is unmatched. I'm stronger, more flexible, and have a completely new relationship with food.",
       image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200",
       achievement: "Improved posture & energy levels",
     },
   ];
