@@ -1305,7 +1305,7 @@ export default function SinglePageApp() {
               <div className="border-t border-gray-200 pt-4">
                 <div className="flex justify-between items-center text-xl font-medium">
                   <span>Total:</span>
-                  <span>${cartTotal}</span>
+                  <span>₱{cartTotal.toLocaleString()}</span>
                 </div>
               </div>
 
