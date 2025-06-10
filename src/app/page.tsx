@@ -2489,16 +2489,9 @@ export default function SinglePageApp() {
               </a>
             </div>
 
-            {/* Elfsight Instagram Feed */}
-            <div className="w-full">
-              <script
-                src="https://static.elfsight.com/platform/platform.js"
-                async
-              ></script>
-              <div
-                className="elfsight-app-9c50c023-a35e-4c59-91b4-28120ab48c98"
-                data-elfsight-app-lazy
-              ></div>
+            {/* Client-side Instagram Feed */}
+            <div className="w-full relative">
+              <InstagramFeed />
             </div>
           </div>
         </div>
