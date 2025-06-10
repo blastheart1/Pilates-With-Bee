@@ -56,13 +56,16 @@ export default function SinglePageApp() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedMembership, setSelectedMembership] = useState("");
   const [newsletter, setNewsletter] = useState("");
-  const [userType, setUserType] = useState<"new" | "existing">("new");
+  const [showActionButtons, setShowActionButtons] = useState(false);
 
-  // Navigation highlighting based on scroll position
+  // Navigation highlighting and button visibility based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "meet-bee", "testimonials", "faqs", "contact"];
       const scrollPosition = window.scrollY + 100;
+
+      // Show action buttons after scrolling 200px
+      setShowActionButtons(window.scrollY > 200);
 
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId);
@@ -92,6 +95,12 @@ export default function SinglePageApp() {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
     }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
   }, [enrollOpen, bookingOpen]);
 
   const scrollToSection = (sectionId: string) => {
@@ -353,13 +362,13 @@ export default function SinglePageApp() {
 
   return (
     <div className="font-sans bg-white text-gray-900">
-      {/* Enhanced Navigation with Better Readability */}
+      {/* Enhanced Navigation with Centered Layout */}
       <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
         <div className="relative z-10 px-16 py-8">
-          <div className="flex justify-between items-center max-w-screen-2xl mx-auto">
-            {/* Left Navigation */}
-            <div className="flex space-x-10">
+          <div className="flex items-center justify-center max-w-screen-2xl mx-auto">
+            {/* Centered Main Navigation */}
+            <div className="flex items-center justify-center space-x-16">
               <button
                 onClick={() => scrollToSection("meet-bee")}
                 className={`text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
@@ -370,6 +379,7 @@ export default function SinglePageApp() {
               >
                 Meet Bee
               </button>
+
               <button
                 onClick={() => scrollToSection("testimonials")}
                 className={`text-base font-medium tracking-[0.15em] hover:opacity-70 transition-all uppercase text-white relative ${
@@ -380,13 +390,10 @@ export default function SinglePageApp() {
               >
                 Testimonials
               </button>
-            </div>
 
-            {/* Center Section with PWB and FAQs */}
-            <div className="flex items-center space-x-10">
               <button
                 onClick={() => scrollToSection("faqs")}
-                className={`text-lg font-medium tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
+                className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
                   activeSection === "faqs"
                     ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
                     : ""
@@ -394,15 +401,17 @@ export default function SinglePageApp() {
               >
                 FAQs
               </button>
+
               <button
                 onClick={() => scrollToSection("home")}
-                className="text-3xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors"
+                className="text-4xl font-light tracking-[0.3em] text-white hover:text-pink-400 transition-colors mx-8"
               >
                 PWB
               </button>
+
               <button
                 onClick={() => scrollToSection("contact")}
-                className={`text-lg font-medium tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
+                className={`text-lg font-semibold tracking-[0.2em] hover:opacity-70 transition-all uppercase text-white relative ${
                   activeSection === "contact"
                     ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
                     : ""
@@ -412,29 +421,33 @@ export default function SinglePageApp() {
               </button>
             </div>
 
-            {/* Right Navigation - Actions & Social Media */}
-            <div className="flex items-center space-x-6">
+            {/* Action Buttons - Show on Scroll */}
+            <div
+              className={`absolute right-0 flex items-center space-x-4 transition-all duration-500 ${
+                showActionButtons
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 -translate-y-4 pointer-events-none"
+              }`}
+            >
               {/* Enroll Now Button */}
-              <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
-                <DialogTrigger asChild>
-                  <button className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-6 py-2.5 transition-colors uppercase rounded flex items-center space-x-2">
-                    <UserPlus size={16} />
-                    <span>Enroll Now</span>
-                  </button>
-                </DialogTrigger>
-              </Dialog>
+              <button
+                onClick={() => setEnrollOpen(true)}
+                className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 transition-colors uppercase rounded-md flex items-center space-x-2 shadow-lg"
+              >
+                <UserPlus size={14} />
+                <span>Enroll</span>
+              </button>
 
               {/* Book Now Button */}
-              <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-                <DialogTrigger asChild>
-                  <button className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-6 py-2.5 transition-colors uppercase rounded flex items-center space-x-2">
-                    <CalendarDays size={16} />
-                    <span>Book Now</span>
-                  </button>
-                </DialogTrigger>
-              </Dialog>
+              <button
+                onClick={() => setBookingOpen(true)}
+                className="text-sm font-medium tracking-[0.15em] bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 transition-colors uppercase rounded-md flex items-center space-x-2 shadow-lg"
+              >
+                <CalendarDays size={14} />
+                <span>Book</span>
+              </button>
 
-              <div className="w-px h-6 bg-white/30"></div>
+              <div className="w-px h-6 bg-white/30 ml-4"></div>
 
               {/* Social Media Icons */}
               <a
@@ -493,20 +506,18 @@ export default function SinglePageApp() {
               WITH BEE
             </p>
             <div className="mt-20 flex space-x-6">
-              <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
-                <DialogTrigger asChild>
-                  <button className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light">
-                    Enroll Now
-                  </button>
-                </DialogTrigger>
-              </Dialog>
-              <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-                <DialogTrigger asChild>
-                  <button className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-colors uppercase font-light">
-                    Book Class
-                  </button>
-                </DialogTrigger>
-              </Dialog>
+              <button
+                onClick={() => setEnrollOpen(true)}
+                className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light"
+              >
+                Enroll Now
+              </button>
+              <button
+                onClick={() => setBookingOpen(true)}
+                className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-colors uppercase font-light"
+              >
+                Book Class
+              </button>
             </div>
             <p className="mt-32 tracking-[0.3em] text-sm uppercase font-light">
               MOVE · NOURISH · TRANSFORM
@@ -516,679 +527,320 @@ export default function SinglePageApp() {
       </section>
 
       {/* Enhanced Enroll Now Modal for New Users */}
-      <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
-        <DialogContent className="max-w-4xl bg-white rounded-xl relative overflow-hidden max-h-[95vh]">
-          {/* Full backdrop blur overlay */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-md -z-20" />
+      {enrollOpen && (
+        <Dialog open={enrollOpen} onOpenChange={setEnrollOpen}>
+          <DialogContent className="max-w-4xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
+            <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+              ×
+            </DialogClose>
 
-          <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center">
-            ×
-          </DialogClose>
-
-          <div className="overflow-auto max-h-[90vh] p-8">
-            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-              Welcome to PWB
-            </DialogTitle>
-            <DialogDescription asChild>
-              <div className="text-center mb-8">
-                <p className="text-lg text-gray-600">
-                  Begin your wellness journey with our comprehensive
-                  pre-assessment
-                </p>
-              </div>
-            </DialogDescription>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert(
-                  "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
-                );
-                setEnrollOpen(false);
-              }}
-              className="space-y-8 text-gray-900"
-            >
-              {/* Personal Information */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Users className="mr-2 text-pink-600" size={20} />
-                  Personal Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="firstName" className="font-medium">
-                      First Name *
-                    </Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName" className="font-medium">
-                      Last Name *
-                    </Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email" className="font-medium">
-                      Email Address *
-                    </Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone" className="font-medium">
-                      Phone Number *
-                    </Label>
-                    <Input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="age" className="font-medium">
-                      Age *
-                    </Label>
-                    <Input
-                      type="number"
-                      id="age"
-                      name="age"
-                      min="16"
-                      max="100"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="emergencyContact" className="font-medium">
-                      Emergency Contact
-                    </Label>
-                    <Input
-                      id="emergencyContact"
-                      name="emergencyContact"
-                      placeholder="Name & Phone"
-                      className="mt-1"
-                    />
-                  </div>
+            <div className="overflow-auto max-h-[90vh] p-8">
+              <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
+                Welcome to PWB
+              </DialogTitle>
+              <DialogDescription asChild>
+                <div className="text-center mb-8">
+                  <p className="text-lg text-gray-600">
+                    Begin your wellness journey with our comprehensive
+                    pre-assessment
+                  </p>
                 </div>
-              </div>
+              </DialogDescription>
 
-              {/* Fitness Background */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Target className="mr-2 text-pink-600" size={20} />
-                  Fitness Background
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="experience" className="font-medium">
-                      Pilates Experience *
-                    </Label>
-                    <select
-                      id="experience"
-                      name="experience"
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      required
-                    >
-                      <option value="">Select your level</option>
-                      <option value="beginner">Complete Beginner</option>
-                      <option value="some">Some Experience (1-6 months)</option>
-                      <option value="intermediate">
-                        Intermediate (6+ months)
-                      </option>
-                      <option value="advanced">Advanced (2+ years)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <Label htmlFor="fitnessLevel" className="font-medium">
-                      Overall Fitness Level *
-                    </Label>
-                    <select
-                      id="fitnessLevel"
-                      name="fitnessLevel"
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      required
-                    >
-                      <option value="">Select level</option>
-                      <option value="sedentary">Sedentary</option>
-                      <option value="lightly-active">Lightly Active</option>
-                      <option value="moderately-active">
-                        Moderately Active
-                      </option>
-                      <option value="very-active">Very Active</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Label htmlFor="currentActivities" className="font-medium">
-                    Current Physical Activities
-                  </Label>
-                  <Textarea
-                    id="currentActivities"
-                    name="currentActivities"
-                    rows={3}
-                    placeholder="List any sports, exercise routines, or physical activities you currently do..."
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-
-              {/* Health Assessment */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Heart className="mr-2 text-pink-600" size={20} />
-                  Health Assessment
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="healthConditions" className="font-medium">
-                      Health Conditions & Injuries
-                    </Label>
-                    <Textarea
-                      id="healthConditions"
-                      name="healthConditions"
-                      rows={3}
-                      placeholder="Please list any current or past injuries, surgeries, chronic conditions, or physical limitations we should be aware of..."
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="medications" className="font-medium">
-                      Current Medications
-                    </Label>
-                    <Textarea
-                      id="medications"
-                      name="medications"
-                      rows={2}
-                      placeholder="List any medications, supplements, or treatments you're currently taking..."
-                      className="mt-1"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Pain Level (1-10)</Label>
-                      <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1">
-                        <option value="">No current pain</option>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                          <option key={i} value={i}>
-                            {i}{" "}
-                            {i <= 3
-                              ? "(Mild)"
-                              : i <= 6
-                                ? "(Moderate)"
-                                : "(Severe)"}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <Label htmlFor="painLocation" className="font-medium">
-                        Pain Location (if any)
-                      </Label>
-                      <Input
-                        id="painLocation"
-                        name="painLocation"
-                        placeholder="e.g., lower back, neck, knees"
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Goals & Expectations */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Target className="mr-2 text-pink-600" size={20} />
-                  Goals & Expectations
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="goals" className="font-medium">
-                      Primary Fitness Goals *
-                    </Label>
-                    <Textarea
-                      id="goals"
-                      name="goals"
-                      rows={3}
-                      placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
-                      required
-                      className="mt-1"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="timeline" className="font-medium">
-                        Goal Timeline
-                      </Label>
-                      <select
-                        id="timeline"
-                        name="timeline"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      >
-                        <option value="">Select timeline</option>
-                        <option value="1-3months">1-3 months</option>
-                        <option value="3-6months">3-6 months</option>
-                        <option value="6-12months">6-12 months</option>
-                        <option value="1year+">1+ years</option>
-                      </select>
-                    </div>
-                    <div>
-                      <Label htmlFor="commitment" className="font-medium">
-                        Weekly Commitment
-                      </Label>
-                      <select
-                        id="commitment"
-                        name="commitment"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      >
-                        <option value="">Select frequency</option>
-                        <option value="1x">1x per week</option>
-                        <option value="2x">2x per week</option>
-                        <option value="3x">3x per week</option>
-                        <option value="4x+">4+ times per week</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Preferences */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <Clock className="mr-2 text-pink-600" size={20} />
-                  Preferences & Availability
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="availability" className="font-medium">
-                      Preferred Class Times *
-                    </Label>
-                    <select
-                      id="availability"
-                      name="availability"
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      required
-                    >
-                      <option value="">Select preferred time</option>
-                      <option value="early-morning">
-                        Early Morning (6AM - 8AM)
-                      </option>
-                      <option value="morning">Morning (8AM - 11AM)</option>
-                      <option value="midday">Midday (11AM - 2PM)</option>
-                      <option value="afternoon">Afternoon (2PM - 5PM)</option>
-                      <option value="evening">Evening (5PM - 8PM)</option>
-                      <option value="flexible">I'm flexible</option>
-                    </select>
-                  </div>
-                  <div>
-                    <Label htmlFor="classSize" className="font-medium">
-                      Class Size Preference
-                    </Label>
-                    <select
-                      id="classSize"
-                      name="classSize"
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                    >
-                      <option value="">No preference</option>
-                      <option value="private">Private (1-on-1)</option>
-                      <option value="semi-private">
-                        Semi-Private (2-3 people)
-                      </option>
-                      <option value="small-group">
-                        Small Group (4-6 people)
-                      </option>
-                      <option value="large-group">
-                        Large Group (7+ people)
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <Label className="font-medium">
-                    Services of Interest (select all that apply)
-                  </Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="pilates-group"
-                        className="mr-2"
-                      />
-                      Group Pilates Classes
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="pilates-private"
-                        className="mr-2"
-                      />
-                      Private Pilates Sessions
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="nutrition-consultation"
-                        className="mr-2"
-                      />
-                      Nutrition Consultation
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="meal-planning"
-                        className="mr-2"
-                      />
-                      Meal Planning
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="wellness-coaching"
-                        className="mr-2"
-                      />
-                      Wellness Coaching
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="services"
-                        value="virtual-sessions"
-                        className="mr-2"
-                      />
-                      Virtual Sessions
-                    </label>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <Label htmlFor="referral" className="font-medium">
-                    How did you hear about us?
-                  </Label>
-                  <select
-                    id="referral"
-                    name="referral"
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                  >
-                    <option value="">Select source</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="tiktok">TikTok</option>
-                    <option value="google">Google Search</option>
-                    <option value="friend">Friend/Family Referral</option>
-                    <option value="doctor">Healthcare Provider</option>
-                    <option value="walkby">Walked by the studio</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Additional Information */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4">
-                  Additional Information
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="specialRequests" className="font-medium">
-                      Special Requests or Questions
-                    </Label>
-                    <Textarea
-                      id="specialRequests"
-                      name="specialRequests"
-                      rows={3}
-                      placeholder="Is there anything else you'd like us to know? Any specific concerns or requests?"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      id="newsletter"
-                      name="newsletter"
-                      className="mt-1"
-                    />
-                    <Label htmlFor="newsletter" className="text-sm">
-                      I'd like to receive wellness tips, nutrition insights, and
-                      studio updates via email
-                    </Label>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      name="terms"
-                      className="mt-1"
-                      required
-                    />
-                    <Label htmlFor="terms" className="text-sm">
-                      I agree to the terms and conditions and understand that
-                      this information will be used for my health and safety *
-                    </Label>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-center pt-4">
-                <Button
-                  type="submit"
-                  className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
-                >
-                  Complete Pre-Assessment & Schedule Consultation
-                </Button>
-                <p className="text-sm text-gray-600 mt-3">
-                  We'll review your information and contact you within 24 hours
-                  to schedule your complimentary consultation
-                </p>
-              </div>
-            </form>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Enhanced Book Now Modal for Existing Users */}
-      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-        <DialogContent className="max-w-5xl bg-white rounded-xl relative overflow-hidden max-h-[95vh]">
-          {/* Full backdrop blur overlay */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-md -z-20" />
-
-          <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center">
-            ×
-          </DialogClose>
-
-          <div className="overflow-auto max-h-[90vh] p-8">
-            <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
-              Book Your Class
-            </DialogTitle>
-            <DialogDescription asChild>
-              <div className="text-center mb-8">
-                <p className="text-lg text-gray-600">
-                  Select your preferred date, time, and instructor
-                </p>
-              </div>
-            </DialogDescription>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Calendar Section */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-medium mb-4 flex items-center">
-                  <CalendarIcon className="mr-2 text-pink-600" size={20} />
-                  Select Date
-                </h3>
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  className="rounded-md border w-full"
-                  disabled={(date) => date < new Date()}
-                />
-              </div>
-
-              {/* Time Slots & Details */}
-              <div className="space-y-6">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert(
+                    "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
+                  );
+                  setEnrollOpen(false);
+                }}
+                className="space-y-8 text-gray-900"
+              >
+                {/* Personal Information */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="text-xl font-medium mb-4 flex items-center">
-                    <Clock className="mr-2 text-pink-600" size={20} />
-                    Available Time Slots
+                    <Users className="mr-2 text-pink-600" size={20} />
+                    Personal Information
                   </h3>
-                  {selectedDate ? (
-                    <div className="space-y-3">
-                      {availableSlots.map((slot, index) => (
-                        <div
-                          key={index}
-                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                            slot.available
-                              ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
-                              : "border-gray-100 bg-gray-100 cursor-not-allowed opacity-50"
-                          }`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-lg">
-                                {slot.time}
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                with {slot.instructor}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {slot.location}
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              {slot.available ? (
-                                <span className="text-green-600 font-medium">
-                                  Available
-                                </span>
-                              ) : (
-                                <span className="text-red-500 font-medium">
-                                  Booked
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 text-center py-8">
-                      Please select a date to view available time slots
-                    </p>
-                  )}
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-medium mb-4">Class Details</h3>
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <Label htmlFor="classType" className="font-medium">
-                        Class Type
+                      <Label htmlFor="firstName" className="font-medium">
+                        First Name *
                       </Label>
-                      <select
-                        id="classType"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      >
-                        <option>Group Pilates Class</option>
-                        <option>Private Session</option>
-                        <option>Semi-Private Session</option>
-                        <option>Nutrition Consultation</option>
-                      </select>
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        required
+                        className="mt-1"
+                      />
                     </div>
-
                     <div>
-                      <Label htmlFor="membershipType" className="font-medium">
-                        Membership Type
+                      <Label htmlFor="lastName" className="font-medium">
+                        Last Name *
                       </Label>
-                      <select
-                        id="membershipType"
-                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
-                      >
-                        <option>Basic Plan (4 classes remaining)</option>
-                        <option>Premium Plan (8 classes remaining)</option>
-                        <option>Unlimited Plan</option>
-                        <option>Drop-in Class ($35)</option>
-                      </select>
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        required
+                        className="mt-1"
+                      />
                     </div>
-
                     <div>
-                      <Label htmlFor="specialRequests" className="font-medium">
-                        Special Requests
+                      <Label htmlFor="email" className="font-medium">
+                        Email Address *
                       </Label>
-                      <Textarea
-                        id="specialRequests"
-                        name="specialRequests"
-                        rows={3}
-                        placeholder="Any modifications, equipment preferences, or special needs for this session?"
+                      <Input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone" className="font-medium">
+                        Phone Number *
+                      </Label>
+                      <Input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="age" className="font-medium">
+                        Age *
+                      </Label>
+                      <Input
+                        type="number"
+                        id="age"
+                        name="age"
+                        min="16"
+                        max="100"
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="emergencyContact" className="font-medium">
+                        Emergency Contact
+                      </Label>
+                      <Input
+                        id="emergencyContact"
+                        name="emergencyContact"
+                        placeholder="Name & Phone"
                         className="mt-1"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-pink-50 p-6 rounded-lg border border-pink-200">
-                  <h3 className="text-lg font-medium mb-3 text-pink-800">
-                    Booking Summary
+                {/* Fitness Background */}
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-medium mb-4 flex items-center">
+                    <Target className="mr-2 text-pink-600" size={20} />
+                    Fitness Background
                   </h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Date:</span>
-                      <span className="font-medium">
-                        {selectedDate
-                          ? selectedDate.toDateString()
-                          : "Not selected"}
-                      </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="experience" className="font-medium">
+                        Pilates Experience *
+                      </Label>
+                      <select
+                        id="experience"
+                        name="experience"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
+                        required
+                      >
+                        <option value="">Select your level</option>
+                        <option value="beginner">Complete Beginner</option>
+                        <option value="some">
+                          Some Experience (1-6 months)
+                        </option>
+                        <option value="intermediate">
+                          Intermediate (6+ months)
+                        </option>
+                        <option value="advanced">Advanced (2+ years)</option>
+                      </select>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Time:</span>
-                      <span className="font-medium">Please select above</span>
+                    <div>
+                      <Label htmlFor="fitnessLevel" className="font-medium">
+                        Overall Fitness Level *
+                      </Label>
+                      <select
+                        id="fitnessLevel"
+                        name="fitnessLevel"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm mt-1"
+                        required
+                      >
+                        <option value="">Select level</option>
+                        <option value="sedentary">Sedentary</option>
+                        <option value="lightly-active">Lightly Active</option>
+                        <option value="moderately-active">
+                          Moderately Active
+                        </option>
+                        <option value="very-active">Very Active</option>
+                      </select>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Instructor:</span>
-                      <span className="font-medium">
-                        Based on time selection
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Location:</span>
-                      <span className="font-medium">
-                        Based on time selection
-                      </span>
+                  </div>
+                  <div className="mt-4">
+                    <Label htmlFor="currentActivities" className="font-medium">
+                      Current Physical Activities
+                    </Label>
+                    <Textarea
+                      id="currentActivities"
+                      name="currentActivities"
+                      rows={3}
+                      placeholder="List any sports, exercise routines, or physical activities you currently do..."
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                {/* Goals & Expectations */}
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-medium mb-4 flex items-center">
+                    <Target className="mr-2 text-pink-600" size={20} />
+                    Goals & Expectations
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="goals" className="font-medium">
+                        Primary Fitness Goals *
+                      </Label>
+                      <Textarea
+                        id="goals"
+                        name="goals"
+                        rows={3}
+                        placeholder="What do you hope to achieve? (e.g., improve flexibility, build core strength, reduce stress, lose weight, recover from injury, etc.)"
+                        required
+                        className="mt-1"
+                      />
                     </div>
                   </div>
                 </div>
 
-                <Button
-                  className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
-                  disabled={!selectedDate}
-                >
-                  Confirm Booking
-                </Button>
+                <div className="text-center pt-4">
+                  <Button
+                    type="submit"
+                    className="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 px-12 rounded-lg font-medium"
+                  >
+                    Complete Pre-Assessment & Schedule Consultation
+                  </Button>
+                  <p className="text-sm text-gray-600 mt-3">
+                    We'll review your information and contact you within 24
+                    hours to schedule your complimentary consultation
+                  </p>
+                </div>
+              </form>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Enhanced Book Now Modal for Existing Users */}
+      {bookingOpen && (
+        <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+          <DialogContent className="max-w-5xl bg-white rounded-xl relative max-h-[95vh] overflow-hidden">
+            <DialogClose className="absolute right-6 top-6 text-3xl opacity-70 hover:opacity-100 transition-opacity z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+              ×
+            </DialogClose>
+
+            <div className="overflow-auto max-h-[90vh] p-8">
+              <DialogTitle className="text-4xl font-light text-center uppercase tracking-widest mb-4 text-gray-800">
+                Book Your Class
+              </DialogTitle>
+              <DialogDescription asChild>
+                <div className="text-center mb-8">
+                  <p className="text-lg text-gray-600">
+                    Select your preferred date, time, and instructor
+                  </p>
+                </div>
+              </DialogDescription>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Calendar Section */}
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-medium mb-4 flex items-center">
+                    <CalendarIcon className="mr-2 text-pink-600" size={20} />
+                    Select Date
+                  </h3>
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    className="rounded-md border w-full"
+                    disabled={(date) => date < new Date()}
+                  />
+                </div>
+
+                {/* Time Slots & Details */}
+                <div className="space-y-6">
+                  <div className="bg-gray-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-medium mb-4 flex items-center">
+                      <Clock className="mr-2 text-pink-600" size={20} />
+                      Available Time Slots
+                    </h3>
+                    {selectedDate ? (
+                      <div className="space-y-3">
+                        {availableSlots.map((slot, index) => (
+                          <div
+                            key={index}
+                            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                              slot.available
+                                ? "border-gray-200 hover:border-pink-600 hover:bg-pink-50"
+                                : "border-gray-100 bg-gray-100 cursor-not-allowed opacity-50"
+                            }`}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <div className="font-medium text-lg">
+                                  {slot.time}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  with {slot.instructor}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {slot.location}
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                {slot.available ? (
+                                  <span className="text-green-600 font-medium">
+                                    Available
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500 font-medium">
+                                    Booked
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 text-center py-8">
+                        Please select a date to view available time slots
+                      </p>
+                    )}
+                  </div>
+
+                  <Button
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white text-lg py-4 rounded-lg font-medium"
+                    disabled={!selectedDate}
+                  >
+                    Confirm Booking
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Membership Plans Section */}
       <section className="py-24 bg-gray-50">
