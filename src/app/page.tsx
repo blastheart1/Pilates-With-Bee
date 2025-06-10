@@ -2313,33 +2313,16 @@ export default function SinglePageApp() {
               </a>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {instagramPosts.map((post, index) => (
-                <div
-                  key={index}
-                  className="relative group cursor-pointer aspect-square"
-                >
-                  <img
-                    src={post.image}
-                    alt={`Instagram post ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all rounded-lg flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center">
-                      <div className="flex items-center space-x-4 text-sm">
-                        <span className="flex items-center">
-                          <Heart size={16} className="mr-1" />
-                          {post.likes}
-                        </span>
-                        <span className="flex items-center">
-                          <MessageSquare size={16} className="mr-1" />
-                          {post.comments}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Elfsight Instagram Feed */}
+            <div className="w-full">
+              <script
+                src="https://static.elfsight.com/platform/platform.js"
+                async
+              ></script>
+              <div
+                className="elfsight-app-9c50c023-a35e-4c59-91b4-28120ab48c98"
+                data-elfsight-app-lazy
+              ></div>
             </div>
           </div>
         </div>
