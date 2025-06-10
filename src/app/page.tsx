@@ -278,6 +278,63 @@ export default function SinglePageApp() {
     </button>
   );
 
+  // Client-side Instagram Feed Component
+  const InstagramFeed = () => {
+    const [feedLoaded, setFeedLoaded] = useState(false);
+
+    useEffect(() => {
+      if (!isMounted || !instagramLoaded) return;
+
+      // Load Elfsight script dynamically
+      const script = document.createElement("script");
+      script.src = "https://static.elfsight.com/platform/platform.js";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        setFeedLoaded(true);
+      };
+      document.head.appendChild(script);
+
+      return () => {
+        // Cleanup script on unmount
+        const existingScript = document.querySelector(
+          'script[src="https://static.elfsight.com/platform/platform.js"]',
+        );
+        if (existingScript) {
+          existingScript.remove();
+        }
+      };
+    }, [isMounted, instagramLoaded]);
+
+    if (!isMounted || !instagramLoaded) {
+      return (
+        <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+          <div className="text-center">
+            <LoadingSpinner size={32} />
+            <p className="mt-4 text-gray-600">Loading Instagram feed...</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="w-full">
+        <div
+          className="elfsight-app-9c50c023-a35e-4c59-91b4-28120ab48c98"
+          data-elfsight-app-lazy
+        />
+        {!feedLoaded && (
+          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
+            <div className="text-center">
+              <LoadingSpinner size={24} />
+              <p className="mt-2 text-gray-600 text-sm">Loading posts...</p>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const membershipPlans = [
     {
       name: "Basic",
