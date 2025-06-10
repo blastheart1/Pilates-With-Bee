@@ -888,42 +888,71 @@ export default function SinglePageApp() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen overflow-hidden">
+      <section
+        id="home"
+        className="relative h-screen overflow-hidden"
+        itemScope
+        itemType="https://schema.org/FitnessCenter"
+      >
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-black opacity-40 z-10" />
           <img
             src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80"
-            alt="Hero Background"
+            alt="Professional Pilates studio in Metro Manila with modern equipment and serene atmosphere"
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
         <div className="relative z-20 flex flex-col justify-center items-center h-full text-white">
           <div className="text-center space-y-6">
-            <h2 className="text-[120px] font-extralight tracking-[0.2em] uppercase">
+            <h1
+              className="text-[120px] font-extralight tracking-[0.2em] uppercase"
+              itemProp="name"
+            >
               pilates
-            </h2>
-            <p className="text-2xl font-light tracking-[0.5em] mt-6">
+            </h1>
+            <p
+              className="text-2xl font-light tracking-[0.5em] mt-6"
+              itemProp="slogan"
+            >
               WITH BEE
             </p>
             <div className="mt-20 flex space-x-6">
-              <button
+              <EnhancedButton
                 onClick={() => setEnrollOverlay(true)}
-                className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light"
+                className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-all uppercase font-light"
+                loading={loading}
+                aria-label="Enroll in PWB Pilates classes - Start your wellness journey"
               >
                 Enroll Now
-              </button>
-              <button
+              </EnhancedButton>
+              <EnhancedButton
                 onClick={() => setBookingOverlay(true)}
-                className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-colors uppercase font-light"
+                className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-all uppercase font-light"
+                loading={loading}
+                aria-label="Book a Pilates class at PWB Studio"
               >
                 Book Class
-              </button>
+              </EnhancedButton>
             </div>
-            <p className="mt-32 tracking-[0.3em] text-sm uppercase font-light">
+            <p
+              className="mt-32 tracking-[0.3em] text-sm uppercase font-light"
+              itemProp="description"
+            >
               MOVE · NOURISH · TRANSFORM
             </p>
           </div>
         </div>
+
+        {/* Schema.org structured data elements */}
+        <meta
+          itemProp="address"
+          content="123 Wellness Street, Makati City, Metro Manila"
+        />
+        <meta itemProp="telephone" content="+63-917-123-4567" />
+        <meta itemProp="email" content="hello@pwbpilates.com" />
+        <meta itemProp="priceRange" content="₱₱" />
       </section>
 
       {/* Enroll Now Overlay */}
