@@ -1233,27 +1233,39 @@ export default function SinglePageApp() {
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
       </a>
 
-      {/* Floating Action Buttons */}
+      {/* Floating Action Buttons - Mobile Optimized */}
       <div
-        className={`fixed bottom-8 right-8 z-50 flex flex-col space-y-4 transition-all duration-500 ${
+        className={`fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40 flex flex-col space-y-3 sm:space-y-4 transition-all duration-500 ${
           showFloatingButtons
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-8 pointer-events-none"
         }`}
+        style={{
+          bottom: "max(1rem, env(safe-area-inset-bottom))",
+          right: "max(1rem, env(safe-area-inset-right))",
+        }}
       >
         <button
           onClick={() => setEnrollOverlay(true)}
-          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-all duration-300 hover:scale-105"
+          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-3 sm:px-6 sm:py-3 rounded-full shadow-lg flex items-center space-x-2 transition-all duration-300 hover:scale-105 min-h-[44px]"
+          aria-label="Enroll in PWB Pilates classes"
         >
           <UserPlus size={16} />
-          <span className="font-medium">Enroll Now</span>
+          <span className="font-medium text-sm sm:text-base hidden sm:inline">
+            Enroll Now
+          </span>
+          <span className="font-medium text-sm sm:hidden">Enroll</span>
         </button>
         <button
           onClick={() => setBookingOverlay(true)}
-          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-all duration-300 hover:scale-105"
+          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-3 sm:px-6 sm:py-3 rounded-full shadow-lg flex items-center space-x-2 transition-all duration-300 hover:scale-105 min-h-[44px]"
+          aria-label="Book a Pilates class"
         >
           <CalendarDays size={16} />
-          <span className="font-medium">Book Class</span>
+          <span className="font-medium text-sm sm:text-base hidden sm:inline">
+            Book Class
+          </span>
+          <span className="font-medium text-sm sm:hidden">Book</span>
         </button>
       </div>
 
