@@ -2242,7 +2242,7 @@ export default function SinglePageApp() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&q=80"
+                src="https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80"
                 alt="Bee - Certified Pilates Instructor"
                 className="w-full h-[600px] object-cover rounded-lg shadow-lg"
               />
