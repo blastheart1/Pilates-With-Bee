@@ -873,6 +873,20 @@ export default function SinglePageApp() {
     );
   };
 
+  // Prevent server-side rendering for the entire component to avoid hydration issues
+  if (!isMounted) {
+    return (
+      <div className="font-sans bg-white text-gray-900">
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <LoadingSpinner size={48} />
+            <p className="mt-4 text-gray-600">Loading PWB Pilates...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="font-sans bg-white text-gray-900">
       {/* Restructured Navigation - 3 Sections */}
