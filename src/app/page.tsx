@@ -1295,7 +1295,9 @@ export default function SinglePageApp() {
                     </button>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">${item.price * item.quantity}</p>
+                    <p className="font-medium">
+                      ₱{(item.price * item.quantity).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               ))}
