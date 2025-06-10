@@ -161,8 +161,22 @@ export default function SinglePageApp() {
     ],
   });
 
+  // Handle client-side mounting to prevent hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+
+    // Load Instagram widget after component mounts
+    const timer = setTimeout(() => {
+      setInstagramLoaded(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Check if hero buttons are out of view and show floating buttons
   useEffect(() => {
+    if (!isMounted) return;
+
     const handleScroll = () => {
       const sections = ["home", "meet-bee", "testimonials", "faqs", "contact"];
       const scrollPosition = window.scrollY + 100;
@@ -185,7 +199,7 @@ export default function SinglePageApp() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isMounted]);
 
   // Prevent body scroll when overlay is open
   React.useEffect(() => {
