@@ -67,6 +67,7 @@ import {
   Scale,
   Utensils,
   PieChart,
+  Menu,
 } from "lucide-react";
 
 export default function SinglePageApp() {
