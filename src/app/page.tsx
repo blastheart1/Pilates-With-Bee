@@ -969,11 +969,25 @@ export default function SinglePageApp() {
           </div>
 
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
+              setLoading(true);
+
+              // Simulate API call
+              await new Promise((resolve) => setTimeout(resolve, 2000));
+
+              // Track conversion for analytics
+              if (typeof gtag !== "undefined") {
+                gtag("event", "form_submit", {
+                  event_category: "engagement",
+                  event_label: "enrollment_form",
+                });
+              }
+
               alert(
                 "Thank you for enrolling! We'll contact you within 24 hours to schedule your complimentary consultation.",
               );
+              setLoading(false);
               setEnrollOverlay(false);
             }}
             className="space-y-8 text-gray-900"
