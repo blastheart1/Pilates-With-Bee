@@ -1269,12 +1269,16 @@ export default function SinglePageApp() {
         </button>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section - Mobile Optimized */}
       <section
         id="home"
-        className="relative h-screen overflow-hidden"
+        className="relative min-h-screen overflow-hidden"
         itemScope
         itemType="https://schema.org/FitnessCenter"
+        style={{
+          minHeight: "100vh",
+          minHeight: "100dvh", // Dynamic viewport height for mobile browsers
+        }}
       >
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-black opacity-40 z-10" />
@@ -1286,24 +1290,37 @@ export default function SinglePageApp() {
             fetchPriority="high"
           />
         </div>
-        <div className="relative z-20 flex flex-col justify-center items-center h-full text-white">
-          <div className="text-center space-y-6">
+        <div
+          className="relative z-20 flex flex-col justify-center items-center h-full text-white px-4 sm:px-8"
+          style={{
+            minHeight: "100vh",
+            minHeight: "100dvh",
+            paddingTop: "max(4rem, env(safe-area-inset-top))",
+            paddingBottom: "max(2rem, env(safe-area-inset-bottom))",
+          }}
+        >
+          <div className="text-center space-y-4 sm:space-y-6">
+            {/* Responsive Hero Title */}
             <h1
-              className="text-[120px] font-extralight tracking-[0.2em] uppercase"
+              className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[120px] font-extralight tracking-[0.1em] sm:tracking-[0.15em] lg:tracking-[0.2em] uppercase leading-none"
               itemProp="name"
             >
               pilates
             </h1>
+
+            {/* Responsive Subtitle */}
             <p
-              className="text-2xl font-light tracking-[0.5em] mt-6"
+              className="text-lg sm:text-xl lg:text-2xl font-light tracking-[0.3em] sm:tracking-[0.4em] lg:tracking-[0.5em] mt-3 sm:mt-6"
               itemProp="slogan"
             >
               WITH BEE
             </p>
-            <div className="mt-20 flex space-x-6">
+
+            {/* Mobile-Optimized Action Buttons */}
+            <div className="mt-8 sm:mt-12 lg:mt-20 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 w-full max-w-md sm:max-w-none">
               <EnhancedButton
                 onClick={() => setEnrollOverlay(true)}
-                className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-all uppercase font-light"
+                className="w-full sm:w-auto border border-white px-8 sm:px-12 lg:px-20 py-4 sm:py-4 text-sm sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] hover:bg-white hover:text-black transition-all uppercase font-light min-h-[48px] flex items-center justify-center"
                 loading={loading}
                 aria-label="Enroll in PWB Pilates classes - Start your wellness journey"
               >
@@ -1311,15 +1328,17 @@ export default function SinglePageApp() {
               </EnhancedButton>
               <EnhancedButton
                 onClick={() => setBookingOverlay(true)}
-                className="bg-pink-600 hover:bg-pink-700 text-white px-20 py-4 text-sm tracking-[0.3em] transition-all uppercase font-light"
+                className="w-full sm:w-auto bg-pink-600 hover:bg-pink-700 text-white px-8 sm:px-12 lg:px-20 py-4 sm:py-4 text-sm sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] transition-all uppercase font-light min-h-[48px] flex items-center justify-center"
                 loading={loading}
                 aria-label="Book a Pilates class at PWB Studio"
               >
                 Book Class
               </EnhancedButton>
             </div>
+
+            {/* Responsive Tagline */}
             <p
-              className="mt-32 tracking-[0.3em] text-sm uppercase font-light"
+              className="mt-12 sm:mt-16 lg:mt-32 tracking-[0.2em] sm:tracking-[0.3em] text-xs sm:text-sm uppercase font-light"
               itemProp="description"
             >
               MOVE · NOURISH · TRANSFORM
