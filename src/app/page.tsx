@@ -367,36 +367,36 @@ export default function SinglePageApp() {
     {
       id: 3,
       name: "Premium Pilates Mat",
-      price: 89,
+      price: 4450,
       image:
-        "https://images.unsplash.com/photo-1518309312833-5fe1de3ba001?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80&w=400",
       type: "physical",
       stock: 15,
     },
     {
       id: 4,
       name: "Resistance Bands Set",
-      price: 45,
+      price: 2250,
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=400",
       type: "physical",
       stock: 8,
     },
     {
       id: 5,
       name: "Pilates Ball",
-      price: 35,
+      price: 1750,
       image:
-        "https://images.unsplash.com/photo-1566133485067-2e65b0c42615?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=400",
       type: "physical",
       stock: 20,
     },
     {
       id: 6,
       name: "Foam Roller",
-      price: 55,
+      price: 2750,
       image:
-        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?auto=format&fit=crop&q=80&w=400",
       type: "physical",
       stock: 12,
     },
