@@ -2750,16 +2750,29 @@ export default function SinglePageApp() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div
+              <article
                 key={index}
                 className="bg-gray-50 rounded-lg p-8 text-center"
+                itemScope
+                itemType="https://schema.org/Review"
               >
                 <img
                   src={testimonial.image}
-                  alt={testimonial.name}
+                  alt={`${testimonial.name} - PWB Pilates client testimonial`}
                   className="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                  loading="lazy"
                 />
-                <div className="flex justify-center mb-4">
+                <div
+                  className="flex justify-center mb-4"
+                  itemProp="reviewRating"
+                  itemScope
+                  itemType="https://schema.org/Rating"
+                >
+                  <meta
+                    itemProp="ratingValue"
+                    content={testimonial.rating.toString()}
+                  />
+                  <meta itemProp="bestRating" content="5" />
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
@@ -2768,14 +2781,22 @@ export default function SinglePageApp() {
                     />
                   ))}
                 </div>
-                <p className="text-gray-700 mb-4 italic">
+                <blockquote
+                  className="text-gray-700 mb-4 italic"
+                  itemProp="reviewBody"
+                >
                   "{testimonial.text}"
-                </p>
-                <h4 className="font-medium">{testimonial.name}</h4>
-                <p className="text-sm text-pink-600 font-medium">
-                  {testimonial.achievement}
-                </p>
-              </div>
+                </blockquote>
+                <footer>
+                  <cite className="font-medium not-italic" itemProp="author">
+                    {testimonial.name}
+                  </cite>
+                  <p className="text-sm text-pink-600 font-medium">
+                    {testimonial.achievement}
+                  </p>
+                </footer>
+                <meta itemProp="itemReviewed" content="PWB Pilates Studio" />
+              </article>
             ))}
           </div>
         </div>
