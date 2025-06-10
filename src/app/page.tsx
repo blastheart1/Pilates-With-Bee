@@ -310,44 +310,44 @@ export default function SinglePageApp() {
     {
       id: 7,
       name: "30-Day Pilates Program",
-      price: 79,
+      price: 3950,
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80&w=400",
       type: "digital",
       description: "Complete video series with nutrition guide",
     },
     {
       id: 8,
       name: "Nutrition Meal Plans",
-      price: 49,
+      price: 2450,
       image:
-        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400",
       type: "digital",
       description: "12 weeks of personalized meal plans",
     },
     {
       id: 9,
       name: "Meditation & Mindfulness",
-      price: 39,
+      price: 1950,
       image:
-        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?auto=format&fit=crop&q=80&w=400",
       type: "digital",
       description: "Guided meditation videos and techniques",
     },
   ];
 
   const giftCertificates = [
-    { id: 10, name: "1 Private Session", price: 120, type: "gift" },
-    { id: 11, name: "5-Class Package", price: 250, type: "gift" },
-    { id: 12, name: "$100 Gift Card", price: 100, type: "gift" },
-    { id: 13, name: "$250 Gift Card", price: 250, type: "gift" },
+    { id: 10, name: "1 Private Session", price: 6000, type: "gift" },
+    { id: 11, name: "5-Class Package", price: 12500, type: "gift" },
+    { id: 12, name: "₱5,000 Gift Card", price: 5000, type: "gift" },
+    { id: 13, name: "₱12,500 Gift Card", price: 12500, type: "gift" },
   ];
 
   const subscriptionBoxes = [
     {
       id: 14,
       name: "Monthly Wellness Box",
-      price: 49,
+      price: 2450,
       period: "/month",
       type: "subscription",
       description: "Curated wellness products, supplements, and workout gear",
@@ -355,7 +355,7 @@ export default function SinglePageApp() {
     {
       id: 15,
       name: "Quarterly Premium Box",
-      price: 129,
+      price: 6450,
       period: "/quarter",
       type: "subscription",
       description:
