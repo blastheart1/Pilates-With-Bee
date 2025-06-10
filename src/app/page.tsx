@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +18,9 @@ export default function SinglePageApp() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [bookStudioOpen, setBookStudioOpen] = useState(false);
   const [meetBeeOpen, setMeetBeeOpen] = useState(false);
-  const [loginType, setLoginType] = useState<"member" | "instructor" | "admin">("member");
+  const [loginType, setLoginType] = useState<"member" | "instructor" | "admin">(
+    "member",
+  );
   const [selectedSection, setSelectedSection] = useState("home");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [enrollOpen, setEnrollOpen] = useState(false);
@@ -56,9 +65,7 @@ export default function SinglePageApp() {
               </button>
               <Dialog>
                 <DialogTrigger asChild>
-                  <button
-                    className="text-sm tracking-[0.3em] hover:opacity-70 transition-opacity uppercase text-white"
-                  >
+                  <button className="text-sm tracking-[0.3em] hover:opacity-70 transition-opacity uppercase text-white">
                     Meet Bee
                   </button>
                 </DialogTrigger>
@@ -72,10 +79,20 @@ export default function SinglePageApp() {
                   <DialogDescription asChild>
                     <div className="space-y-6 text-lg leading-relaxed text-gray-900 font-light">
                       <div>
-                        Bee is a Certified BASI Pilates Instructor and a board certified Nutritionist Dietitian (RND) with a passion for mindful movement and sustainable wellness. Her unique approach blends the strength and precision of Pilates with the science of nutrition to help you achieve lasting results from the inside out.
+                        Bee is a Certified BASI Pilates Instructor and a board
+                        certified Nutritionist Dietitian (RND) with a passion
+                        for mindful movement and sustainable wellness. Her
+                        unique approach blends the strength and precision of
+                        Pilates with the science of nutrition to help you
+                        achieve lasting results from the inside out.
                       </div>
                       <div>
-                        By combining movement and proper nourishment, Bee empowers you to feel stronger, more energized, and fully supported in your wellness journey. Whether you're looking to improve posture, build core strength, or make healthier lifestyle choices, Bee is here to guide you with clarity, care, and a whole lot of good energy.
+                        By combining movement and proper nourishment, Bee
+                        empowers you to feel stronger, more energized, and fully
+                        supported in your wellness journey. Whether you're
+                        looking to improve posture, build core strength, or make
+                        healthier lifestyle choices, Bee is here to guide you
+                        with clarity, care, and a whole lot of good energy.
                       </div>
                     </div>
                   </DialogDescription>
@@ -83,7 +100,9 @@ export default function SinglePageApp() {
               </Dialog>
             </div>
             <div className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="text-2xl font-light tracking-[0.3em] text-white">BEE'S PILATES</h1>
+              <h1 className="text-2xl font-light tracking-[0.3em] text-white">
+                BEE'S PILATES
+              </h1>
             </div>
             <div className="flex space-x-12">
               <button
@@ -115,14 +134,16 @@ export default function SinglePageApp() {
         </div>
         <div className="relative z-20 flex flex-col justify-center items-center h-full text-white">
           <div className="text-center space-y-6">
-            <h2 className="text-[120px] font-extralight tracking-[0.2em] uppercase">pilates</h2>
-            <p className="text-2xl font-light tracking-[0.5em] mt-6">WITH BEE</p>
+            <h2 className="text-[120px] font-extralight tracking-[0.2em] uppercase">
+              pilates
+            </h2>
+            <p className="text-2xl font-light tracking-[0.5em] mt-6">
+              WITH BEE
+            </p>
             <div className="mt-20">
               <Dialog>
                 <DialogTrigger asChild>
-                  <button
-                    className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light"
-                  >
+                  <button className="border border-white px-20 py-4 text-sm tracking-[0.3em] hover:bg-white hover:text-black transition-colors uppercase font-light">
                     Enroll Now
                   </button>
                 </DialogTrigger>
@@ -135,51 +156,70 @@ export default function SinglePageApp() {
                   </DialogTitle>
                   <DialogDescription asChild>
                     <div className="space-y-6">
-                      <form onSubmit={(e) => {
-                        e.preventDefault();
-                        // Handle form submission
-                      }} className="space-y-6 text-gray-900">
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="fullName">Full Name</Label>
-                          <Input id="fullName" name="fullName" required />
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          // Handle form submission
+                        }}
+                        className="space-y-6 text-gray-900"
+                      >
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="fullName">Full Name</Label>
+                            <Input id="fullName" name="fullName" required />
+                          </div>
+                          <div>
+                            <Label htmlFor="email">Email Address</Label>
+                            <Input
+                              type="email"
+                              id="email"
+                              name="email"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input type="tel" id="phone" name="phone" />
+                          </div>
+                          <div>
+                            <Label htmlFor="goals">
+                              What are your fitness goals?
+                            </Label>
+                            <textarea
+                              id="goals"
+                              name="goals"
+                              rows={3}
+                              className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="health">
+                              Any health conditions or injuries we should know
+                              about?
+                            </Label>
+                            <textarea
+                              id="health"
+                              name="health"
+                              rows={3}
+                              className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            />
+                          </div>
                         </div>
-                        <div>
-                          <Label htmlFor="email">Email Address</Label>
-                          <Input type="email" id="email" name="email" required />
-                        </div>
-                        <div>
-                          <Label htmlFor="phone">Phone Number</Label>
-                          <Input type="tel" id="phone" name="phone" />
-                        </div>
-                        <div>
-                          <Label htmlFor="goals">What are your fitness goals?</Label>
-                          <textarea
-                            id="goals"
-                            name="goals"
-                            rows={3}
-                            className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="health">Any health conditions or injuries we should know about?</Label>
-                          <textarea
-                            id="health"
-                            name="health"
-                            rows={3}
-                            className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          />
-                        </div>
-                      </div>
-                      <Button type="submit" className="w-full bg-black text-white hover:bg-pink-600">
-                        Submit
-                      </Button>
-                    </form>
+                        <Button
+                          type="submit"
+                          className="w-full bg-black text-white hover:bg-pink-600"
+                        >
+                          Submit
+                        </Button>
+                      </form>
+                    </div>
                   </DialogDescription>
                 </DialogContent>
               </Dialog>
             </div>
-            <p className="mt-32 tracking-[0.3em] text-sm uppercase font-light">MOVE · NOURISH · TRANSFORM</p>
+            <p className="mt-32 tracking-[0.3em] text-sm uppercase font-light">
+              MOVE · NOURISH · TRANSFORM
+            </p>
           </div>
         </div>
       </section>
@@ -187,7 +227,9 @@ export default function SinglePageApp() {
       {/* About Section */}
       <section id="about" className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-8">
-          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">ABOUT</h2>
+          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">
+            ABOUT
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div>
               <img
@@ -198,7 +240,9 @@ export default function SinglePageApp() {
             </div>
             <div className="flex flex-col justify-center">
               <p className="text-lg leading-relaxed mb-8">
-                Welcome to Bee's Pilates Studio, where we blend traditional Pilates principles with modern wellness practices. Our approach focuses on building strength, flexibility, and mindful movement.
+                Welcome to Bee's Pilates Studio, where we blend traditional
+                Pilates principles with modern wellness practices. Our approach
+                focuses on building strength, flexibility, and mindful movement.
               </p>
               <button
                 onClick={() => setLoginOpen(true)}
@@ -214,25 +258,33 @@ export default function SinglePageApp() {
       {/* Virtual Studio Section */}
       <section id="virtual" className="py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-8">
-          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">VIRTUAL STUDIO</h2>
+          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">
+            VIRTUAL STUDIO
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <h3 className="text-xl font-light mb-4">LIVE STREAM</h3>
-              <p className="mb-6">Join our live virtual classes from anywhere in the world.</p>
+              <p className="mb-6">
+                Join our live virtual classes from anywhere in the world.
+              </p>
               <button className="border-2 border-black px-6 py-2 text-sm tracking-widest hover:bg-black hover:text-white transition-colors">
                 BOOK NOW
               </button>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-light mb-4">ON DEMAND</h3>
-              <p className="mb-6">Access our library of recorded classes anytime.</p>
+              <p className="mb-6">
+                Access our library of recorded classes anytime.
+              </p>
               <button className="border-2 border-black px-6 py-2 text-sm tracking-widest hover:bg-black hover:text-white transition-colors">
                 START NOW
               </button>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-light mb-4">PRIVATE</h3>
-              <p className="mb-6">One-on-one virtual sessions tailored to your needs.</p>
+              <p className="mb-6">
+                One-on-one virtual sessions tailored to your needs.
+              </p>
               <button className="border-2 border-black px-6 py-2 text-sm tracking-widest hover:bg-black hover:text-white transition-colors">
                 ENQUIRE
               </button>
@@ -244,11 +296,14 @@ export default function SinglePageApp() {
       {/* Live Classes Section */}
       <section id="live" className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-8">
-          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">LIVE CLASSES</h2>
+          <h2 className="text-3xl font-light mb-12 tracking-widest text-center">
+            LIVE CLASSES
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div className="flex flex-col justify-center">
               <p className="text-lg leading-relaxed mb-8">
-                Experience the energy of in-person classes at our studio. Join our community and transform your practice with expert guidance.
+                Experience the energy of in-person classes at our studio. Join
+                our community and transform your practice with expert guidance.
               </p>
               <button
                 onClick={() => setBookStudioOpen(true)}
@@ -285,7 +340,9 @@ export default function SinglePageApp() {
       {/* Login Modal */}
       <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
         <DialogContent className="max-w-md bg-white p-8">
-          <h3 className="text-2xl font-light tracking-widest mb-8 text-center">LOGIN</h3>
+          <h3 className="text-2xl font-light tracking-widest mb-8 text-center">
+            LOGIN
+          </h3>
           <div className="mb-6 flex space-x-4">
             {["member", "instructor", "admin"].map((type) => (
               <button
@@ -301,14 +358,29 @@ export default function SinglePageApp() {
           </div>
           <form className="space-y-4">
             <div>
-              <Label htmlFor="login-email" className="text-sm tracking-widest">EMAIL</Label>
+              <Label htmlFor="login-email" className="text-sm tracking-widest">
+                EMAIL
+              </Label>
               <Input id="login-email" type="email" required className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="login-password" className="text-sm tracking-widest">PASSWORD</Label>
-              <Input id="login-password" type="password" required className="mt-1" />
+              <Label
+                htmlFor="login-password"
+                className="text-sm tracking-widest"
+              >
+                PASSWORD
+              </Label>
+              <Input
+                id="login-password"
+                type="password"
+                required
+                className="mt-1"
+              />
             </div>
-            <Button type="submit" className="w-full bg-black hover:bg-pink-600 text-white mt-6">
+            <Button
+              type="submit"
+              className="w-full bg-black hover:bg-pink-600 text-white mt-6"
+            >
               LOGIN
             </Button>
           </form>
@@ -335,8 +407,6 @@ export default function SinglePageApp() {
           </div>
         </DialogContent>
       </Dialog>
-
-
     </div>
   );
 }
