@@ -447,48 +447,49 @@ export default function SinglePageApp() {
   const instagramPosts = [
     {
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Morning flow to start the day right ✨ #pilates #mindfulmovement",
+        "Morning flow to start the day right ✨ Finding balance in movement and breath #pilates #mindfulmovement #morningpractice",
       likes: 342,
       comments: 28,
     },
     {
       image:
-        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Core strength isn't just about abs - it's about stability, posture, and confidence 💪",
+        "Core strength isn't just about abs - it's about stability, posture, and confidence 💪 #corepower #pilateslife #strongwomen",
       likes: 567,
       comments: 45,
     },
     {
       image:
-        "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Nutrition tip: Start your day with intention and nourishment 🥗 #wellness",
+        "Nutrition tip: Start your day with intention and nourishment 🥗 Colorful plates = happy bodies #wellness #nutrition #healthyeating",
       likes: 289,
       comments: 19,
     },
     {
       image:
-        "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Behind the scenes of our group class prep ✨ #pilatesinstructor",
+        "Behind the scenes of our group class prep ✨ Setting intentions for today's practice #pilatesinstructor #preparation #mindfulness",
       likes: 412,
       comments: 33,
     },
     {
       image:
-        "https://images.unsplash.com/photo-1506629905228-b50909eae2e1?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?auto=format&fit=crop&q=80&w=300&h=300",
       caption:
-        "Sunday self-care session 🧘‍♀️ How are you nourishing your body today?",
+        "Sunday self-care session 🧘‍♀️ How are you nourishing your body today? Taking time to breathe and reset #selfcare #sundayvibes",
       likes: 634,
       comments: 52,
     },
     {
       image:
-        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80",
-      caption: "Recovery is just as important as the workout 💆‍♀️ #selfcare",
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=300&h=300",
+      caption:
+        "Recovery is just as important as the workout 💆‍♀️ Gentle stretches to restore and rejuvenate #selfcare #recovery #stretching",
       likes: 378,
       comments: 24,
     },
