@@ -534,7 +534,7 @@ export default function SinglePageApp() {
       excerpt:
         "Start your Pilates journey with these foundational movements that build core strength and improve posture.",
       image:
-        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=400",
       date: "March 15, 2024",
       readTime: "5 min read",
     },
@@ -543,7 +543,7 @@ export default function SinglePageApp() {
       excerpt:
         "Separating fact from fiction in the world of nutrition and wellness.",
       image:
-        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400",
       date: "March 12, 2024",
       readTime: "7 min read",
     },
@@ -552,7 +552,7 @@ export default function SinglePageApp() {
       excerpt:
         "Understanding how Pilates creates lasting changes in both physical and mental well-being.",
       image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1544966503-7cc36a8d5c82?auto=format&fit=crop&q=80&w=400",
       date: "March 10, 2024",
       readTime: "6 min read",
     },
